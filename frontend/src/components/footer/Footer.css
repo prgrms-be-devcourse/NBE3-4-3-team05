@@ -1,0 +1,37 @@
+:root {
+  --footer-height: 18rem;
+  --footer-text: var(--text-secondary);
+  --footer-border-radius: 0 0 20px 20px;
+  --footer-bacground-color: var(--background-secondary);
+  --footer-font-size: 1rem;
+}
+
+#footer {
+  width: 100%;
+  height: var(--footer-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  color: var(--footer-text);
+  background-color: var(--footer-bacground-color);
+  border-radius: var(--footer-border-radius);
+  padding: var(--padding);
+}
+
+.footer-icon-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+.footer-info {
+  font-size: calc(var(--footer-font-size) + 0.6rem);
+  font-weight: bold;
+}
+
+.copyright {
+  width: 100%;
+  text-align: end;
+  padding-top: 2rem;
+  font-size: var(--footer-font-size);
+}

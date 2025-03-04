@@ -1,0 +1,28 @@
+name: Build Test
+
+on:
+  pull_request:
+#    branches:
+#      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        working-directory: ./backend
+        run: ./gradlew clean build

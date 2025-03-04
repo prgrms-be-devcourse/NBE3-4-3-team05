@@ -1,0 +1,16 @@
+{
+	"editor.tabSize": 4, // 탭 크기를 4로 설정
+	"editor.insertSpaces": false, // 공백 대신 실제 탭을 사용하도록 설정
+	"editor.detectIndentation": false, // 자동 들여쓰기 감지를 비활성화하여 위 설정을 우선시
+	"editor.formatOnSave": false, // 파일 저장 시 자동으로 포맷팅
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"prettier.useTabs": true, // Prettier에서 탭을 사용하도록 설정
+	"prettier.tabWidth": 4, // Prettier에서 탭 크기 설정
+	"prettier.trailingComma": "all", // 마지막 항목 뒤에 항상 쉼표 추가
+	"eslint.format.enable": true // ESLint에서 포맷팅 기능 활성화
+}

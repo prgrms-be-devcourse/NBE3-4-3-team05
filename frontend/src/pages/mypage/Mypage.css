@@ -1,0 +1,116 @@
+/* Mypage.css */
+.mypage {
+  font-family: Arial, sans-serif;
+  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mypage h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.mypage h2 {
+  font-size: 28px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.mypage .info-card {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mypage .info-card p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 5px 0;
+}
+
+.mypage .info-card strong {
+  color: #007bff;
+}
+
+.mypage .favorite-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.mypage .favorite-list .favorite-item {
+  padding: 10px 20px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.mypage .favorite-list .favorite-item:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.mypage .button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.mypage .modify-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-top: 15px;
+}
+
+.mypage .modify-button:hover {
+  background-color: #0056b3;
+}
+
+.mypage .class-section, .mypage .schedule-section {
+  margin-top: 30px;
+}
+
+.mypage .class-item, .mypage .schedule-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.mypage .class-item h3, .mypage .schedule-item h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.mypage .class-item p, .mypage .schedule-item p {
+  margin: 5px 0;
+}
+
+.mypage .class-item button, .mypage .schedule-item button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.mypage .class-item button:hover, .mypage .schedule-item button:hover {
+  background-color: #218838;
+}

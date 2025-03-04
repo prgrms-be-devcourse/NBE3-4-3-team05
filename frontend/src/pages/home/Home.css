@@ -1,0 +1,100 @@
+.class-container {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 30px;
+  margin-top: 10px;
+}
+
+.class-container + .class-container {
+  margin-top: 40px;
+}
+
+.class-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  /* position: relative; */
+  padding: 20px 20px;
+  border-radius: 8px;
+  box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.18);
+}
+
+.class-info button {
+  flex: none;
+  padding: 10px 15px;
+  background-color: var(--text-primary);
+  border: none;
+  border-radius: 5px;
+  color: var(--color-brand-gray);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.class-info button:hover {
+  background-color: var(--text-success);
+}
+
+.class-info .class-name {
+  max-width: 350px;
+}
+
+.class-info .class-name > p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.class-info .class-name > p:first-child {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.class-info .class-name > p:not(:first-child) {
+  margin-top: 7px;
+  line-height: 18px;
+}
+
+.class-info .class-flag {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 5px;
+  border: 1px solid #fac7c7;
+  border-radius: 37px;
+  background-color: #fef3f3;
+  font-size: 12px;
+}
+
+.sort-container {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin: 16px 0;
+}
+
+.filter-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: background-color 0.2s;
+}
+
+.filter-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+}
+
+.sort-select {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  cursor: pointer;
+}

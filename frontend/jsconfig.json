@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "jsx": "react",
+    "baseUrl": "./"
+  },
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/hooks/useFetch.ts"],
+  "exclude": ["node_modules", "build"]
+}

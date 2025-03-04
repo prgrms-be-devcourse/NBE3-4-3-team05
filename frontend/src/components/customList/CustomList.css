@@ -1,0 +1,99 @@
+/* 리스트의 컨테이너 */
+.list-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 리스트 전체 스타일 */
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 각 리스트 항목 스타일 */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* 리스트 항목 호버 시 배경색 변경 */
+.list-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* 항목 정보 스타일 */
+.item-info {
+  flex: 1;
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-brand-neutral-darker);
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin: 5px 0;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+/* 버튼 영역 스타일 */
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 참석/불참 버튼 스타일 */
+.custom-button {
+  background-color: var(--text-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+/* 불참 버튼 색상 */
+.custom-button.warning {
+  background-color: var(--text-error);
+}
+
+/* 버튼 호버 시 효과 */
+.custom-button:hover {
+  background-color: var(--text-success);
+}
+
+/* 불참 버튼 호버 시 */
+.custom-button.warning:hover {
+  background-color: var(--color-brand-reder);
+}
+
+/* 참석/불참 상태 텍스트 스타일 */
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--color-brand-neutral-darker);
+}

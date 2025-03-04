@@ -1,0 +1,55 @@
+.layout {
+  width: 100%;
+  max-width: 660px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0 auto;
+
+  z-index: var(--z-index);
+}
+
+header {
+  flex: 0 1 auto;
+  z-index: calc(var(--z-index) + 10);
+}
+
+footer {
+  flex: 0 1 auto;
+  margin-top: auto;
+  z-index: var(--z-index);
+}
+
+main {
+  flex: 1 0 auto;
+  background-color: var(--background-primary);
+  /* border-radius: 20px; */
+  z-index: calc(var(--z-index) + 1);
+  /* margin-top: 6rem; */
+  padding: 8rem 2rem 2rem;
+}
+
+main > * {
+  width: 100%;
+}
+
+button.back {
+  width: initial;
+  margin-bottom: 20px;
+  padding: 8px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button.back:hover {
+  background-color: var(--text-primary);
+  color: #fff;
+}
+
+button.back:has(+ .home) {
+  display: none;
+}

@@ -1,0 +1,154 @@
+.alertBg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  font-size: 0;
+  text-align: center;
+
+  background-color: rgba(0, 0, 0, 0.3);
+
+  opacity: 0;
+  transition: opacity 0.3s;
+  overflow-y: auto;
+  z-index: calc(var(--z-index) + 100);
+  pointer-events: none;
+}
+
+.show-alert {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.show-alert .custom-alert {
+  padding: 20px;
+  box-sizing: border-box;
+  -webkit-animation: custom-Alert 0.4s;
+  animation: custom-Alert 0.4s;
+  animation-fill-mode: forwards;
+  will-change: transform;
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-alert {
+  width: 400px;
+  height: 220px;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  background-color: var(--background-primary);
+  border-radius: 10px;
+
+  margin-top: -90px;
+  margin-left: -219px;
+  padding: 0;
+
+  opacity: 0;
+  pointer-events: none;
+
+  z-index: calc(var(--z-index) + 101);
+}
+
+@keyframes custom-Alert {
+  0% {
+    transform: translateY(100%) scale(0.6) scaleY(0.5);
+  }
+  60% {
+    transform: translateY(-7%) scaleY(1.12);
+  }
+  75% {
+    transform: translateY(3%);
+  }
+  100% {
+    transform: translateY(0%) scale(1) scaleY(1);
+  }
+}
+
+@-webkit-keyframes custom-Alert {
+  0% {
+    transform: translateY(100%) scale(0.6) scaleY(0.5);
+  }
+  60% {
+    transform: translateY(-7%) scaleY(1.12);
+  }
+  75% {
+    transform: translateY(3%);
+  }
+  100% {
+    transform: translateY(0%) scale(1) scaleY(1);
+  }
+}
+
+.alert-text {
+  width: 100%;
+  max-width: calc(100% - 20px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.8;
+  white-space: pre-line;
+
+  margin: 0;
+}
+
+.alert-footer {
+  align-self: flex-end;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.alert-footer button {
+  width: 35%;
+
+  border: none;
+  border-radius: 5px;
+
+  background-color: var(--text-primary);
+
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+}
+
+#customBtnClose {
+  background-color: var(--text-error);
+  p {
+    font-weight: 600;
+    color: var(--background-primary);
+  }
+}
+
+#customBtnClose:hover {
+  background-color: var(--color-brand-reder);
+}
+
+#customBtnSelect {
+  p {
+    font-weight: 700;
+    color: var(--background-primary);
+  }
+}
+
+#customBtnSelect:hover {
+  background-color: var(--text-success);
+}
