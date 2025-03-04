@@ -104,9 +104,8 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         authenticationService.signup(signupDto);
 
         // then
-        Optional<User> findOptionalData = userRepository.findByLoginId(loginId);
-        assertThat(findOptionalData).isPresent();
-        User findData = findOptionalData.get();
+        User findData = userRepository.findByLoginId(loginId);
+        assertThat(findData).isNotNull();
         assertThat(findData)
                 .extracting("loginId", "nickname", "type", "status", "role")
                 .containsExactly(loginId, nickname, UserType.NORMAL, UserStatus.ACTIVE, UserRole.ROLE_USER);

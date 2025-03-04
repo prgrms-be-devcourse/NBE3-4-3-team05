@@ -104,10 +104,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         // 2. userId,nickname 중복 검사
-        Optional<User> findOptionalUser = userRepository.findByLoginIdOrNickname(
-                signupDto.getLoginId(), signupDto.getNickname());
-        if(findOptionalUser.isPresent()) {
-            User findUser = findOptionalUser.get();
+        User findUser = userRepository.findByLoginIdOrNickname(signupDto.getLoginId(), signupDto.getNickname());
+        if(findUser != null) {
             if(findUser.getLoginId().equals(signupDto.getLoginId())){
                 throw new CustomException(ErrorCode.DUPLICATED_LOGIN_ID);
             }

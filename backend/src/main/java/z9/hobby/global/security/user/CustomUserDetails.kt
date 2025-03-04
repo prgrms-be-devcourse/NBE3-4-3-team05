@@ -7,15 +7,15 @@ import z9.hobby.model.user.User
 class CustomUserDetails(val user: User) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        return listOf(GrantedAuthority { user.getUserRole().name })
+        return listOf(GrantedAuthority { user.role.name })
     }
 
     override fun getPassword(): String {
-        return user.getPassword();
+        return user.password.toString()
     }
 
     override fun getUsername(): String {
-        return user.getId().toString()
+        return user.id.toString()
     }
 
     override fun isAccountNonExpired(): Boolean {

@@ -26,7 +26,7 @@ class CustomAuthenticationProvider(
             ?: throw CustomException(ErrorCode.LOGIN_FAIL)
 
         val customUserDetails = userDetails as CustomUserDetails
-        if (customUserDetails.user.getStatus() == UserStatus.DELETE) {
+        if (customUserDetails.user.status == UserStatus.DELETE) {
             throw CustomException(ErrorCode.LOGIN_RESIGN_USER)
         }
 
