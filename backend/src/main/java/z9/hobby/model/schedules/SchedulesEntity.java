@@ -57,23 +57,4 @@ public class SchedulesEntity extends BaseEntity {
         this.meetingTitle = meetingTitle;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public ClassEntity getClasses() {
-        return classes;
-    }
-
-    public String getMeetingTime() {
-        return meetingTime;
-    }
-
-    public String getMeetingTitle() {
-        return meetingTitle;
-    }
-
-    public List<CheckInEntity> getCheckins() {
-        return checkins;
-    }
 }
