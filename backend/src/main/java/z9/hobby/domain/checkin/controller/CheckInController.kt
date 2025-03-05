@@ -15,7 +15,7 @@ import z9.hobby.global.response.SuccessCode
 @RestController
 @RequestMapping("/api/v1/checkin")
 @Tag(name = "Checkin controller", description = "모임 참석 유무 컨트롤러")
-class CheckInController(private val checkInService: CheckInServiceImpl) {  // 변경
+class CheckInController(private val checkInService: CheckInServiceImpl) {
 
     @PostMapping
     @Operation(summary = "참석 여부 생성")
