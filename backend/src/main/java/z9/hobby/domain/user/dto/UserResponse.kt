@@ -39,7 +39,7 @@ class UserResponse {
     }
 
     data class ScheduleInfo(
-        val classId: Long,
+        val classId: Long?,
         val meetingTime: String,
         val meetingTitle: String
     ) {
@@ -66,7 +66,7 @@ class UserResponse {
     }
 
     data class ClassInfo(
-        val classId: Long,
+        val classId: Long?,
         val name: String,
         val description: String,
         val favorite: String
