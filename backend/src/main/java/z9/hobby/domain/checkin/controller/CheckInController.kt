@@ -8,14 +8,14 @@ import java.security.Principal
 import org.springframework.web.bind.annotation.*
 import z9.hobby.domain.checkin.dto.CheckInRequestDto
 import z9.hobby.domain.checkin.dto.CheckInResponseDto
-import z9.hobby.domain.checkin.service.CheckInService
+import z9.hobby.domain.checkin.service.CheckInServiceImpl  // 변경
 import z9.hobby.global.response.BaseResponse
 import z9.hobby.global.response.SuccessCode
 
 @RestController
 @RequestMapping("/api/v1/checkin")
 @Tag(name = "Checkin controller", description = "모임 참석 유무 컨트롤러")
-class CheckInController(private val checkInService: CheckInService) {
+class CheckInController(private val checkInService: CheckInServiceImpl) {  // 변경
 
     @PostMapping
     @Operation(summary = "참석 여부 생성")

@@ -10,7 +10,7 @@ data class CheckInEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sc_id", nullable = false)
-    val id: Long,
+    val id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedules_id")
@@ -22,3 +22,4 @@ data class CheckInEntity(
     @Column(name = "check_in", nullable = false)
     val checkIn: Boolean
 ) : BaseEntity()
+
