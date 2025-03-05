@@ -56,4 +56,5 @@ public class SchedulesEntity extends BaseEntity {
         this.meetingTime = meetingTime;
         this.meetingTitle = meetingTitle;
     }
+
 }
