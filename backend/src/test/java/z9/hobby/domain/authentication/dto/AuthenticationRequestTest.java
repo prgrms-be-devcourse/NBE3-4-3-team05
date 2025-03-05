@@ -28,7 +28,7 @@ class AuthenticationRequestTest {
     void login1() {
         // given
         AuthenticationRequest.Login login =
-                AuthenticationRequest.Login.of("test@test.com", "!asdf1234");
+                new AuthenticationRequest.Login("test@test.com", "!asdf1234");
 
         // when
         Set<ConstraintViolation<AuthenticationRequest.Login>> validate =
@@ -43,7 +43,7 @@ class AuthenticationRequestTest {
     void login2() {
         // given
         AuthenticationRequest.Login login =
-                AuthenticationRequest.Login.of("test", "1234");
+                new AuthenticationRequest.Login("test", "1234");
 
         // when
         Set<ConstraintViolation<AuthenticationRequest.Login>> validate = validator.validate(login);
@@ -68,7 +68,7 @@ class AuthenticationRequestTest {
         String nickname = "test1";
 
         AuthenticationRequest.Signup signupDto =
-                AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+                new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when
         Set<ConstraintViolation<AuthenticationRequest.Signup>> validate =
@@ -88,7 +88,7 @@ class AuthenticationRequestTest {
         String nickname = "a";
 
         AuthenticationRequest.Signup signupDto =
-                AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+                new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when
         Set<ConstraintViolation<AuthenticationRequest.Signup>> validate =

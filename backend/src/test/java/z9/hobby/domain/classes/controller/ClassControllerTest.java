@@ -44,7 +44,7 @@ public class ClassControllerTest extends ClassBaseTest {
 
     // 공통 메서드
     private String loginAndGetToken(String email) throws Exception {
-        AuthenticationRequest.Login request = AuthenticationRequest.Login.of(email, ClassBaseTest.TEST_PASSWORD);
+        AuthenticationRequest.Login request = new AuthenticationRequest.Login(email, ClassBaseTest.TEST_PASSWORD);
         ResultActions result = mockMvc.perform(post("/api/v1/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
