@@ -55,7 +55,7 @@ class CheckInControllerTest extends SpringBootTestSupporter {
         List<SchedulesEntity> saveSchedulesList = schedulesFactory.saveAndCreateClassData(1, saveClass);
         SchedulesEntity saveSchedule = saveSchedulesList.getFirst();
 
-        CheckInRequestDto.CheckInDto request = new CheckInRequestDto.CheckInDto(
+        CheckInRequestDto request = new CheckInRequestDto(
                 saveSchedule.getId(), true);
 
         // when
@@ -98,7 +98,7 @@ class CheckInControllerTest extends SpringBootTestSupporter {
         // 체크인 등록
         checkInFactory.saveAndCreateCheckInData(1, saveSchedule, saveUser, List.of(true));
 
-        CheckInRequestDto.CheckInDto request = new CheckInRequestDto.CheckInDto(
+        CheckInRequestDto request = new CheckInRequestDto(
                 saveSchedule.getId(), false);
 
         // when
