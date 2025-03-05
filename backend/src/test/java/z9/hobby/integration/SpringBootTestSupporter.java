@@ -11,6 +11,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import z9.hobby.domain.authentication.service.AuthenticationService;
 import z9.hobby.domain.checkin.service.CheckInService;
+import z9.hobby.domain.checkin.service.CheckInServiceImpl;
 import z9.hobby.domain.classes.repository.ClassBlackListRepository;
 import z9.hobby.domain.classes.repository.ClassRepository;
 import z9.hobby.domain.classes.repository.ClassUserRepository;
@@ -79,7 +80,7 @@ public abstract class SpringBootTestSupporter {
     @Autowired
     protected ClassService classService;
     @Autowired
-    protected CheckInService checkInService;
+    protected CheckInServiceImpl checkInService;
 
     /**
      * Common
