@@ -19,11 +19,14 @@ public class CheckInEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sc_id", nullable = false)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedules_id")
     private SchedulesEntity schedules;
+
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
     @Column(name = "check_in", nullable = false)
     private boolean checkIn;
 }
