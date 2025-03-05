@@ -1,15 +1,16 @@
-package z9.hobby.domain.user.service;
+package z9.hobby.domain.user.service
 
-import z9.hobby.domain.user.dto.UserRequest;
-import z9.hobby.domain.user.dto.UserResponse;
+import z9.hobby.domain.user.dto.UserRequest.PatchUserInfo
+import z9.hobby.domain.user.dto.UserResponse
+import z9.hobby.domain.user.dto.UserResponse.UserClass
+import z9.hobby.domain.user.dto.UserResponse.UserSchedule
 
-public interface UserService {
+interface UserService {
+    fun findUserInfo(userId: Long): UserResponse.UserInfo
 
-    UserResponse.UserInfo findUserInfo(Long userId);
+    fun patchUserInfo(requestDto: PatchUserInfo, userId: Long)
 
-    void patchUserInfo(UserRequest.PatchUserInfo requestDto, Long userId);
+    fun findUserSchedules(userId: Long): UserSchedule
 
-    UserResponse.UserSchedule findUserSchedules(Long userId);
-
-    UserResponse.UserClass findUserClasses(Long userId);
+    fun findUserClasses(userId: Long): UserClass
 }
