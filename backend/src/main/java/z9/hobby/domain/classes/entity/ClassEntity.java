@@ -11,13 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import z9.hobby.model.BaseEntity;
 import z9.hobby.model.schedules.SchedulesEntity;
 
 @Entity
-@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -86,5 +84,37 @@ public class ClassEntity extends BaseEntity {
                 .build();
 
         blackLists.add(blackUser);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFavorite() {
+        return favorite;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Long getMasterId() {
+        return masterId;
+    }
+
+    public List<ClassUserEntity> getUsers() {
+        return users;
+    }
+
+    public List<ClassBlackListEntity> getBlackLists() {
+        return blackLists;
+    }
+
+    public List<SchedulesEntity> getSchedules() {
+        return schedules;
     }
 }
