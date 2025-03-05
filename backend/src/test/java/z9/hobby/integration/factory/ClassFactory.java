@@ -1,14 +1,15 @@
 package z9.hobby.integration.factory;
 
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import z9.hobby.domain.classes.entity.ClassEntity;
 import z9.hobby.domain.classes.repository.ClassRepository;
 import z9.hobby.domain.favorite.entity.FavoriteEntity;
 import z9.hobby.model.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,19 +22,19 @@ public final class ClassFactory {
     private final EntityManager em;
 
     public List<ClassEntity> saveAndCreateClassData(final int count, User user, FavoriteEntity favorite) {
-        if(count == 0) return List.of();
+        if (count == 0) return List.of();
 
         List<ClassEntity> saveClassDataList = new ArrayList<>(count);
 
-        for(int index=1; index<=count; index++) {
+        for (int index = 1; index <= count; index++) {
             String className = String.format("%s%d", CLASS_NAME_PREFIX, index);
-            ClassEntity newClass = ClassEntity
-                    .builder()
-                    .name(className)
-                    .favorite(favorite.getName())
-                    .description(CLASS_DESCRIPTION)
-                    .masterId(user.getId())
-                    .build();
+            ClassEntity newClass = new ClassEntity(
+                    null,
+                    className,
+                    favorite.getName(),
+                    CLASS_DESCRIPTION,
+                    user.getId()
+            );
             newClass.addMember(user.getId());
             ClassEntity saveClassData = classRepository.save(newClass);
             saveClassDataList.add(saveClassData);
