@@ -1,9 +1,8 @@
-package z9.hobby.model.oauthuser;
+package z9.hobby.model.oauthuser
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface OAuthUserRepository extends JpaRepository<OAuthUser, Long> {
+interface OAuthUserRepository : JpaRepository<OAuthUser, Long> {
 
-    Optional<OAuthUser> findByProviderAndUid(OAuthProvider provider, String uid);
+    fun findByProviderAndUid(provider: OAuthProvider, uid: String): OAuthUser?
 }

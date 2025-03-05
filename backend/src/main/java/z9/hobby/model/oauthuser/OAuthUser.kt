@@ -1,57 +1,33 @@
-package z9.hobby.model.oauthuser;
+package z9.hobby.model.oauthuser
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import z9.hobby.model.BaseEntity;
-import z9.hobby.model.user.User;
+import jakarta.persistence.*
+import z9.hobby.model.BaseEntity
+import z9.hobby.model.user.User
 
-@Getter
 @Entity
-@ToString
 @Table(name = "users_oauth")
-@Builder(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OAuthUser extends BaseEntity {
-
+data class OAuthUser(
     @Id
-    @Column(name = "users_oauth_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "users_oauth_id")
+    val id: Long? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    private OAuthProvider provider;
+    val provider: OAuthProvider,
 
     @Column(name = "uid", unique = true)
-    private String uid;
+    val uid: String,
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    val user: User
+) : BaseEntity() {
 
-    public static OAuthUser createNewOAuthUser(String uid, OAuthProvider provider, User user) {
-        return OAuthUser
-                .builder()
-                .provider(provider)
-                .uid(uid)
-                .user(user)
-                .build();
+    companion object {
+        @JvmStatic
+        fun createNewOAuthUser(uid: String, provider: OAuthProvider, user: User): OAuthUser {
+            return OAuthUser(uid = uid, provider = provider, user = user)
+        }
     }
 }

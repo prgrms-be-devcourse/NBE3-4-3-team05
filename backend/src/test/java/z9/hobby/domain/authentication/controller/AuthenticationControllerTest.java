@@ -45,7 +45,7 @@ class AuthenticationControllerTest extends SpringBootTestSupporter {
         List<User> saveUserList = userFactory.saveAndCreateUserData(1);
         User saveUser = saveUserList.getFirst();
         AuthenticationRequest.Login request =
-                AuthenticationRequest.Login.of(saveUser.getLoginId(), UserFactory.USER_LOGIN_PASSWORD);
+                new AuthenticationRequest.Login(saveUser.getLoginId(), UserFactory.USER_LOGIN_PASSWORD);
 
         // when
         ResultActions result = mockMvc.perform(post("/api/v1/login")
@@ -76,7 +76,7 @@ class AuthenticationControllerTest extends SpringBootTestSupporter {
         String password = "!test1234";
         String nickname = "test1";
         AuthenticationRequest.Signup request =
-                AuthenticationRequest.Signup.of(loginId, password, saveFavoriteNameList, nickname);
+                new AuthenticationRequest.Signup(loginId, password, saveFavoriteNameList, nickname);
 
         // when
         ResultActions result = mockMvc.perform(post("/api/v1/signup")
