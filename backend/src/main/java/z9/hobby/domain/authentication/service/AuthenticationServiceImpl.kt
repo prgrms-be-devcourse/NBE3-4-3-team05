@@ -106,8 +106,12 @@ class AuthenticationServiceImpl(
     override fun resign(userId: String) {
         val findUser = userRepository.findById(userId.toLong())
             .orElseThrow { CustomException(ErrorCode.USER_NOT_FOUND) }
+
         if (findUser.status == UserStatus.DELETE) throw CustomException(ErrorCode.ALREADY_DELETE_USER)
-        if (classRepository.existsByMasterId(findUser.id)) throw CustomException(ErrorCode.CLASS_MASTER_TRANSFER_REQUIRED)
+        if (classRepository.existsByMasterId(findUser.id ?: throw CustomException(ErrorCode.USER_NOT_FOUND))) {
+            throw CustomException(ErrorCode.CLASS_MASTER_TRANSFER_REQUIRED)
+        }
+
         userRepository.save(User.resign(findUser))
         cleanupUserAssociations(findUser.id!!)
     }
