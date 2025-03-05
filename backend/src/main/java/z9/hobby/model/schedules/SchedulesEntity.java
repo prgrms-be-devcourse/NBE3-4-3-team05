@@ -3,7 +3,6 @@ package z9.hobby.model.schedules;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import z9.hobby.domain.classes.entity.ClassEntity;
 import z9.hobby.model.BaseEntity;
@@ -32,6 +31,22 @@ public class SchedulesEntity extends BaseEntity {
 
     @Column(name = "meeting_title", nullable = false)
     private String meetingTitle;
+
+    public Long getId() {
+        return id;
+    }
+
+    public ClassEntity getClasses() {
+        return classes;
+    }
+
+    public String getMeetingTime() {
+        return meetingTime;
+    }
+
+    public String getMeetingTitle() {
+        return meetingTitle;
+    }
 
     @Builder.Default
     @OneToMany(mappedBy = "schedules", cascade = CascadeType.ALL, orphanRemoval = true)

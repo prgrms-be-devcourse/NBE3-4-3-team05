@@ -19,12 +19,13 @@ public abstract class ClassBaseTest extends SpringBootTestSupporter {
     }
 
     protected ClassEntity createTestClass(Long masterId) {
-        ClassEntity newClass = classRepository.save(ClassEntity.builder()
-                .masterId(masterId)
-                .name("테스트 모임")
-                .favorite("취미")
-                .description("테스트 모임설명입니다")
-                .build());
+        ClassEntity newClass = classRepository.save(new ClassEntity(
+                null,
+                "테스트 모임",
+                "취미",
+                "테스트 모임설명입니다",
+                masterId
+        ));
 
         newClass.addMember(masterId);
 
