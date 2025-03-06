@@ -1,0 +1,12 @@
+jwt:
+  secret: ${JWT_SECRET}
+  token:
+    access-expiration: ${JWT_ACCESS_EXPIRATION}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+oauth:
+  kakao:
+    client-id : ${OAUTH_KAKAO_CLIENT_ID}
+    redirect-uri : ${OAUTH_KAKAO_REDIRECT-URI}
+    client-secret : ${OAUTH_KAKAO_CLIENT_SECRET}
+    content-type : ${OAUTH_KAKAO_CONENT_TYPE}

@@ -11,4 +11,4 @@ COPY build/libs/hobby-0.0.1.jar /app/hobby-0.0.1.jar
 EXPOSE 8080
 
 # Run the JAR file when the container starts
-CMD ["java", "-jar", "/app/hobby-0.0.1.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/hobby-0.0.1.jar"]
