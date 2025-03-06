@@ -1,7 +1,5 @@
 package z9.hobby.domain.checkin.service
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import z9.hobby.domain.checkin.dto.CheckInRequestDto
@@ -12,6 +10,8 @@ import z9.hobby.global.response.ErrorCode
 import z9.hobby.model.checkIn.CheckInEntity
 import z9.hobby.model.checkIn.CheckInEntityRepository
 import z9.hobby.model.schedules.SchedulesRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Service
 class CheckInServiceImpl(
@@ -38,11 +38,11 @@ class CheckInServiceImpl(
         val findSchedulesEntity = schedulesRepository.findById(requestDto.scheduleId!!)
             .orElseThrow { CustomException(ErrorCode.SCHEDULE_NOT_FOUND) }
 
-        if (!classUserRepository.existsByClassesAndUserId(findSchedulesEntity.classes, userId)) {
+        if (!classUserRepository.existsByClassesAndUserId(findSchedulesEntity.getClasses(), userId)) {
             throw CustomException(ErrorCode.CLASS_NOT_EXISTS_MEMBER)
         }
 
-        val meetingDateTime = LocalDate.parse(findSchedulesEntity.meetingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val meetingDateTime = LocalDate.parse(findSchedulesEntity.getMeetingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         if (meetingDateTime.isBefore(LocalDate.now())) {
             throw CustomException(ErrorCode.INVALID_PASSED_CHECK_IN)
         }
