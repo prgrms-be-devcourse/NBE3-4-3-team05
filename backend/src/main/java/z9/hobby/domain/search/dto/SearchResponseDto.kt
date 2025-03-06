@@ -1,30 +1,28 @@
-package z9.hobby.domain.search.dto;
+package z9.hobby.domain.search.dto
 
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
-import z9.hobby.domain.classes.entity.ClassEntity;
+import z9.hobby.domain.classes.entity.ClassEntity
+import java.time.LocalDateTime
 
-@Getter
-@Builder
-public class SearchResponseDto {
-    private Long id;
-    private String name;
-    private String favorite;
-    private String description;
-    private int participantCount;
-    private Long masterId;
-    private LocalDateTime createdAt;
-
-    public static SearchResponseDto from(ClassEntity entity) {
-        return SearchResponseDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .favorite(entity.getFavorite())
-                .description(entity.getDescription())
-                .participantCount(entity.getUsers().size())
-                .masterId(entity.getMasterId())
-                .createdAt(entity.getCreatedAt())
-                .build();
+data class SearchResponseDto(
+    val id: Long?,
+    val name: String?,
+    val favorite: String?,
+    val description: String?,
+    val participantCount: Int,
+    val masterId: Long?,
+    val createdAt: LocalDateTime?
+) {
+    companion object {
+        fun from(entity: ClassEntity): SearchResponseDto {
+            return SearchResponseDto(
+                id = entity.id,
+                name = entity.name,
+                favorite = entity.favorite,
+                description = entity.description,
+                participantCount = entity.users.size,
+                masterId = entity.masterId,
+                createdAt = entity.createdAt
+            )
+        }
     }
 }
