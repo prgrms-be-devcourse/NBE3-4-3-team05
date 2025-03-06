@@ -57,7 +57,7 @@ class BaseInitData(
         for (savedUser in savedUserData) {
             for (savedFavorite in saveFavoriteData) {
                 val newUserFavorite = UserFavorite.createNewUserFavorite(savedUser, savedFavorite)
-                val save = userFavoriteRepository!!.save(newUserFavorite)
+                val save = userFavoriteRepository.save(newUserFavorite)
                 savedUserFavoriteData.add(save)
             }
         }
@@ -143,21 +143,22 @@ class BaseInitData(
             // favorites 리스트에서 순환하면서 관심사를 선택 (인덱스가 넘어가면 처음부터 다시)
             val favorite = favorites[(i - 1) % favorites.size].name
 
-            val classEntity = ClassEntity.builder()
-                .name("테스트 모임$i")
-                .favorite(favorite)
-                .description("테스트 모임" + i + "의 설명입니다.")
-                .masterId(masterId)
-                .build()
+            // 코틀린 생성자 방식 사용
+            val classEntity = ClassEntity(
+                name = "테스트 모임$i",
+                favorite = favorite,
+                description = "테스트 모임${i}의 설명입니다.",
+                masterId = masterId
+            )
 
             val savedClass = classRepository.save(classEntity)
             savedClassList.add(savedClass)
 
             // 모임장을 ClassUser로 추가
-            val classUser = ClassUserEntity.builder()
-                .classes(savedClass)
-                .userId(masterId)
-                .build()
+            val classUser = ClassUserEntity(
+                classes = savedClass,
+                userId = masterId
+            )
             classUserRepository.save(classUser)
         }
 

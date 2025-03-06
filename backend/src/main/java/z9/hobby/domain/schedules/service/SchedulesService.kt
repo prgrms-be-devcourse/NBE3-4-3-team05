@@ -101,7 +101,7 @@ class SchedulesService(
                 .orElseThrow { CustomException(ErrorCode.SCHEDULE_NOT_FOUND) }
 
             // 모임장 권한 체크
-            if (!schedule.getClasses().masterId.equals(userId)) {
+            if (schedule.getClasses().masterId != userId) {
                 throw CustomException(ErrorCode.CLASS_ACCESS_DENIED)
             }
 
