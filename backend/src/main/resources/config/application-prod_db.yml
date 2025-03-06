@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${Z9_DB_URL}
+    username: ${Z9_DB_USERNAME}
+    password: ${Z9_DB_PASSWORD}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+redis:
+  host : ${Z9_REDIS_DB_HOST}
+  port : ${Z9_REDIS_DB_PORT}
+  password: ${Z9_REDIS_DB_PASSWORD}
