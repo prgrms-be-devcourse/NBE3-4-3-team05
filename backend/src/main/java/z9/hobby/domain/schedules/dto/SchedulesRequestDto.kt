@@ -27,7 +27,28 @@ class SchedulesRequestDto {
             message = "모임 제목에는 문자, 숫자, 기본 특수문자만 사용할 수 있습니다"
         )
         val meetingTitle: String? = null
-    )
+    ) {
+        companion object {
+            @JvmStatic
+            fun builder() = Builder()
+        }
+
+        class Builder {
+            private var classId: Long? = null
+            private var meetingTime: String? = null
+            private var meetingTitle: String? = null
+
+            fun classId(classId: Long?) = apply { this.classId = classId }
+            fun meetingTime(meetingTime: String?) = apply { this.meetingTime = meetingTime }
+            fun meetingTitle(meetingTitle: String?) = apply { this.meetingTitle = meetingTitle }
+
+            fun build() = CreateRequest(
+                classId = classId,
+                meetingTime = meetingTime,
+                meetingTitle = meetingTitle
+            )
+        }
+    }
 
     data class UpdateRequest(
         // classId 제거 - PathVariable로 받기 때문
@@ -49,5 +70,23 @@ class SchedulesRequestDto {
             message = "모임 제목에는 문자, 숫자, 기본 특수문자만 사용할 수 있습니다"
         )
         val meetingTitle: String? = null
-    )
+    ) {
+        companion object {
+            @JvmStatic
+            fun builder() = Builder()
+        }
+
+        class Builder {
+            private var meetingTime: String? = null
+            private var meetingTitle: String? = null
+
+            fun meetingTime(meetingTime: String?) = apply { this.meetingTime = meetingTime }
+            fun meetingTitle(meetingTitle: String?) = apply { this.meetingTitle = meetingTitle }
+
+            fun build() = UpdateRequest(
+                meetingTime = meetingTime,
+                meetingTitle = meetingTitle
+            )
+        }
+    }
 }
