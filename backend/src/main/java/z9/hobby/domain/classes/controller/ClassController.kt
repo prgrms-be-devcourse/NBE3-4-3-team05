@@ -1,176 +1,169 @@
-package z9.hobby.domain.classes.controller;
+package z9.hobby.domain.classes.controller
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import java.security.Principal;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import z9.hobby.domain.classes.dto.ClassRequest;
-import z9.hobby.domain.classes.dto.ClassResponse;
-import z9.hobby.domain.classes.service.ClassService;
-import z9.hobby.global.response.BaseResponse;
-import z9.hobby.global.response.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.*
+import z9.hobby.domain.classes.dto.ClassRequest.ClassRequestData
+import z9.hobby.domain.classes.dto.ClassRequest.ModifyRequestData
+import z9.hobby.domain.classes.dto.ClassResponse.*
+import z9.hobby.domain.classes.service.ClassService
+import z9.hobby.global.response.BaseResponse
+import z9.hobby.global.response.BaseResponse.Companion.ok
+import z9.hobby.global.response.SuccessCode
+import java.security.Principal
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/classes")
 @Tag(name = "Class Controller", description = "모임 컨트롤러")
-public class ClassController {
-    private final ClassService classService;
-
+class ClassController(
+    private val classService: ClassService
+) {
     @PostMapping
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임 생성")
-    public BaseResponse<ClassResponse.ClassResponseData> create(
-            @RequestBody @Valid ClassRequest.ClassRequestData requestData,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
+    fun create(
+        @Valid @RequestBody requestData: ClassRequestData,
+        principal: Principal
+    ): BaseResponse<ClassResponseData> {
+        val userId = principal.name.toLong()
 
-        ClassResponse.ClassResponseData responseData = classService.save(requestData, userId);
+        val responseData = classService.save(requestData, userId)
 
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_CREATE_SUCCESS, responseData);
+        return ok(SuccessCode.CLASS_CREATE_SUCCESS, responseData)
     }
 
     @PostMapping("/{classId}/membership")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임 가입")
-    public BaseResponse<ClassResponse.JoinResponseData> membership(
-            @PathVariable Long classId,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
+    fun membership(
+        @PathVariable classId: Long,
+        principal: Principal
+    ): BaseResponse<JoinResponseData> {
+        val userId = principal.name.toLong()
 
-        ClassResponse.JoinResponseData responseData = classService.joinMembership(classId, userId);
+        val responseData = classService.joinMembership(classId, userId)
 
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_JOIN_SUCCESS, responseData);
+        return ok(SuccessCode.CLASS_JOIN_SUCCESS, responseData)
     }
 
     @DeleteMapping("/{classId}/membership")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임 탈퇴")
-    public BaseResponse<Void> deleteMembership(
-            @PathVariable Long classId,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
+    fun deleteMembership(
+        @PathVariable classId: Long,
+        principal: Principal
+    ): BaseResponse<Nothing> {
+        val userId = principal.name.toLong()
 
-        classService.deleteMembership(classId, userId);
+        classService.deleteMembership(classId, userId)
 
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_RESIGN_SUCCESS);
+        return ok(SuccessCode.CLASS_RESIGN_SUCCESS)
     }
 
     @GetMapping("/{classId}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임방 입장")
-    public BaseResponse<ClassResponse.EntryResponseData> entry(
-            @PathVariable("classId") Long classId,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
+    fun entry(
+        @PathVariable("classId") classId: Long,
+        principal: Principal
+    ): BaseResponse<EntryResponseData> {
+        val userId = principal.name.toLong()
 
-        ClassResponse.EntryResponseData responseData = classService.getClassInfo(classId, userId);
-        return BaseResponse.Companion.ok(SuccessCode.SUCCESS, responseData);
+        val responseData = classService.getClassInfo(classId, userId)
+        return ok(SuccessCode.SUCCESS, responseData)
     }
 
     @PatchMapping("/{classId}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임 수정")
-    public BaseResponse<Void> modifyClassInfo(
-            @PathVariable("classId") Long classId,
-            @RequestBody @Valid ClassRequest.ModifyRequestData requestData,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
+    fun modifyClassInfo(
+        @PathVariable("classId") classId: Long,
+        @Valid @RequestBody requestData: ModifyRequestData,
+        principal: Principal
+    ): BaseResponse<Nothing> {
+        val userId = principal.name.toLong()
 
-        classService.modifyClassInfo(classId, userId, requestData);
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_MODIFY_SUCCESS);
+        classService.modifyClassInfo(classId, userId, requestData)
+        return ok(SuccessCode.CLASS_MODIFY_SUCCESS)
     }
 
     @GetMapping("/{classId}/memberList")
     @Operation(summary = "모임에 가입한 회원 목록 조회")
-    public BaseResponse<ClassResponse.ClassUserListData> getMemberList(@PathVariable Long classId) {
-        ClassResponse.ClassUserListData classUserListData = classService.getUserListByClassId(classId);
+    fun getMemberList(@PathVariable classId: Long): BaseResponse<ClassUserListData> {
+        val classUserListData = classService.getUserListByClassId(classId)
 
-        return BaseResponse.Companion.ok(SuccessCode.SUCCESS, classUserListData);
+        return ok(SuccessCode.SUCCESS, classUserListData)
     }
 
     @DeleteMapping("/{classId}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임 삭제")
-    public BaseResponse<Void> deleteClass(
-            @PathVariable Long classId,
-            Principal principal
-    ) {
-        Long userId = Long.parseLong(principal.getName());
-        classService.deleteClass(classId, userId);
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_DELETE_SUCCESS);
+    fun deleteClass(
+        @PathVariable classId: Long,
+        principal: Principal
+    ): BaseResponse<Nothing> {
+        val userId = principal.name.toLong()
+        classService.deleteClass(classId, userId)
+        return ok(SuccessCode.CLASS_DELETE_SUCCESS)
     }
 
     @PatchMapping("/{classId}/users/{userId}/role")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "모임장 권한 위임")
-    public BaseResponse<Void> transferMaster(
-            @PathVariable Long classId,
-            @PathVariable Long userId,
-            Principal principal
-    ) {
-        Long currentUserId = Long.parseLong(principal.getName());
+    fun transferMaster(
+        @PathVariable classId: Long,
+        @PathVariable userId: Long,
+        principal: Principal
+    ): BaseResponse<Nothing> {
+        val currentUserId = principal.name.toLong()
 
-        classService.transferMaster(classId, userId, currentUserId);
+        classService.transferMaster(classId, userId, currentUserId)
 
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_MASTER_TRANSFER_SUCCESS);
+        return ok(SuccessCode.CLASS_MASTER_TRANSFER_SUCCESS)
     }
 
     @DeleteMapping("/{classId}/users/{userId}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "회원 강퇴")
-    public BaseResponse<Void> kickOut(
-            @PathVariable Long classId,
-            @PathVariable Long userId,
-            Principal principal
-    ) {
-        Long currentUserId = Long.parseLong(principal.getName());
+    fun kickOut(
+        @PathVariable classId: Long,
+        @PathVariable userId: Long,
+        principal: Principal
+    ): BaseResponse<Nothing> {
+        val currentUserId = principal.name.toLong()
 
-        classService.kickOut(classId, userId, currentUserId);
+        classService.kickOut(classId, userId, currentUserId)
 
-        return BaseResponse.Companion.ok(SuccessCode.CLASS_KICK_OUT_SUCCESS);
+        return ok(SuccessCode.CLASS_KICK_OUT_SUCCESS)
     }
 
     @GetMapping("/{classId}/checkMember")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "가입된 회원 재가입 확인")
-    public BaseResponse<ClassResponse.CheckMemberData> checkMember(
-            @PathVariable Long classId,
-            Principal principal
-    ) {
-        Long currentUserId = Long.parseLong(principal.getName());
+    fun checkMember(
+        @PathVariable classId: Long,
+        principal: Principal
+    ): BaseResponse<CheckMemberData> {
+        val currentUserId = principal.name.toLong()
 
-        ClassResponse.CheckMemberData checkMember = classService.checkMember(classId, currentUserId);
+        val checkMember = classService.checkMember(classId, currentUserId)
 
-        return BaseResponse.Companion.ok(SuccessCode.SUCCESS, checkMember);
+        return ok(SuccessCode.SUCCESS, checkMember)
     }
 
     @GetMapping("/{classId}/checkBlackList")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "강퇴된 회원 재가입 확인")
-    public BaseResponse<ClassResponse.CheckBlackListData> checkBlackList(
-            @PathVariable Long classId,
-            Principal principal
-    ) {
-        Long currentUserId = Long.parseLong(principal.getName());
+    fun checkBlackList(
+        @PathVariable classId: Long,
+        principal: Principal
+    ): BaseResponse<CheckBlackListData> {
+        val currentUserId = principal.name.toLong()
 
-        ClassResponse.CheckBlackListData checkBlackListData = classService.checkBlackList(classId, currentUserId);
+        val checkBlackListData = classService.checkBlackList(classId, currentUserId)
 
-        return BaseResponse.Companion.ok(SuccessCode.SUCCESS, checkBlackListData);
+        return ok(SuccessCode.SUCCESS, checkBlackListData)
     }
 }

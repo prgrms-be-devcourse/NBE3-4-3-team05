@@ -16,7 +16,6 @@ import z9.hobby.domain.user.dto.UserResponse;
 import z9.hobby.global.exception.CustomException;
 import z9.hobby.global.response.ErrorCode;
 import z9.hobby.integration.SpringBootTestSupporter;
-import z9.hobby.model.checkIn.CheckInEntity;
 import z9.hobby.model.schedules.SchedulesEntity;
 import z9.hobby.model.user.User;
 import z9.hobby.model.user.UserRole;
@@ -35,7 +34,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
 
         // 관심사 등록
         List<FavoriteEntity> saveFavoriteList = favoriteFactory.saveAndCreateFavoriteData(2);
-        List<String> saveFavoriteNameList = saveFavoriteList.stream().map(FavoriteEntity::getName).toList();
+        List<String> saveFavoriteNameList = saveFavoriteList.stream().map(FavoriteEntity::getName)
+                .toList();
 
         // 회원-관심사 등록
         userFactory.saveUserFavorite(saveUser, saveFavoriteList);
@@ -46,7 +46,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         // then
         assertThat(findData)
                 .extracting("nickname", "type", "role")
-                .containsExactly(saveUser.getNickname(), UserType.NORMAL.getValue(), UserRole.ROLE_USER.getValue());
+                .containsExactly(saveUser.getNickname(), UserType.NORMAL.getValue(),
+                        UserRole.ROLE_USER.getValue());
         assertThat(findData.getCreatedAt()).matches("\\d{4}-\\d{2}-\\d{2}");
         assertThat(findData.getFavorite())
                 .hasSize(2)
@@ -67,7 +68,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         // then
         assertThat(findData)
                 .extracting("nickname", "type", "role")
-                .containsExactly(saveUser.getNickname(), UserType.NORMAL.getValue(), UserRole.ROLE_USER.getValue());
+                .containsExactly(saveUser.getNickname(), UserType.NORMAL.getValue(),
+                        UserRole.ROLE_USER.getValue());
         assertThat(findData.getCreatedAt()).matches("\\d{4}-\\d{2}-\\d{2}");
         assertThat(findData.getFavorite())
                 .hasSize(0);
@@ -94,13 +96,15 @@ class UserServiceImplTest extends SpringBootTestSupporter {
 
         // 관심사 등록
         List<FavoriteEntity> saveFavoriteList = favoriteFactory.saveAndCreateFavoriteData(2);
-        List<String> saveFavoriteNameList = saveFavoriteList.stream().map(FavoriteEntity::getName).toList();
+        List<String> saveFavoriteNameList = saveFavoriteList.stream().map(FavoriteEntity::getName)
+                .toList();
 
         // 회원-관심사 등록
         userFactory.saveUserFavorite(saveUser, saveFavoriteList);
 
         String changeNickname = "변경된닉네임";
-        UserRequest.PatchUserInfo request = UserRequest.PatchUserInfo.of(changeNickname, saveFavoriteNameList);
+        UserRequest.PatchUserInfo request =
+                new UserRequest.PatchUserInfo(changeNickname, saveFavoriteNameList);
 
         // when
         userService.patchUserInfo(request, saveUser.getId());
@@ -109,7 +113,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         Optional<User> findUserOptional = userRepository.findById(saveUser.getId());
         assertThat(findUserOptional).isPresent();
         User findUser = findUserOptional.get();
-        List<String> findFavoriteList = userFavoriteRepository.findFavoriteNamesByUserId(saveUser.getId());
+        List<String> findFavoriteList = userFavoriteRepository.findFavoriteNamesByUserId(
+                saveUser.getId());
         assertThat(findUser)
                 .extracting("nickname")
                 .isEqualTo(changeNickname);
@@ -133,7 +138,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         userFactory.saveUserFavorite(saveUser, saveFavoriteList);
 
         String changeNickname = "변경된닉네임";
-        UserRequest.PatchUserInfo request = UserRequest.PatchUserInfo.of(changeNickname, List.of(saveFavorite.getName()));
+        UserRequest.PatchUserInfo request =
+                new UserRequest.PatchUserInfo(changeNickname, List.of(saveFavorite.getName()));
 
         // when
         userService.patchUserInfo(request, saveUser.getId());
@@ -143,7 +149,8 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         assertThat(findUserOptional).isPresent();
         User findUser = findUserOptional.get();
 
-        List<String> findFavoriteList = userFavoriteRepository.findFavoriteNamesByUserId(saveUser.getId());
+        List<String> findFavoriteList = userFavoriteRepository.findFavoriteNamesByUserId(
+                saveUser.getId());
 
         assertThat(findUser)
                 .extracting("nickname")
@@ -168,10 +175,10 @@ class UserServiceImplTest extends SpringBootTestSupporter {
 
         String changeNickname = "변경된닉네임";
         UserRequest.PatchUserInfo request =
-                UserRequest.PatchUserInfo.of(changeNickname, List.of("미등록 관심사"));
+                new UserRequest.PatchUserInfo(changeNickname, List.of("미등록 관심사"));
 
         // when // then
-        assertThatThrownBy( () -> userService.patchUserInfo(request, saveUser.getId()))
+        assertThatThrownBy(() -> userService.patchUserInfo(request, saveUser.getId()))
                 .isInstanceOf(CustomException.class)
                 .extracting("code")
                 .isEqualTo(ErrorCode.NOT_EXIST_FAVORITE);
@@ -203,8 +210,7 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         SchedulesEntity saveSchedule = saveSchedulesList.getFirst();
 
         //체크인 등록
-        List<CheckInEntity> saveCheckInList =
-                checkInFactory.saveAndCreateCheckInData(2, saveSchedule, saveUser, List.of(true, false));
+        checkInFactory.saveAndCreateCheckInData(2, saveSchedule, saveUser, List.of(true, false));
 
         // when
         UserResponse.UserSchedule findData = userService.findUserSchedules(saveUser.getId());
@@ -241,6 +247,7 @@ class UserServiceImplTest extends SpringBootTestSupporter {
         assertThat(findData.getClassInfo()).hasSize(1);
         assertThat(findData.getClassInfo().getFirst())
                 .extracting("name", "description", "favorite")
-                .containsExactly(saveClass.getName(), saveClass.getDescription(), saveClass.getFavorite());
+                .containsExactly(saveClass.getName(), saveClass.getDescription(),
+                        saveClass.getFavorite());
     }
 }

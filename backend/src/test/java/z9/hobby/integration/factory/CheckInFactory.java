@@ -29,12 +29,12 @@ public class CheckInFactory {
         List<CheckInEntity> saveCheckInList = new ArrayList<>(count);
 
         for(int index=1; index<=count; index++) {
-            CheckInEntity newCheckIn = CheckInEntity
-                    .builder()
-                    .schedules(schedule)
-                    .userId(user.getId())
-                    .checkIn(check.get(index-1))
-                    .build();
+            CheckInEntity newCheckIn = new CheckInEntity(
+                    null,
+                    schedule,
+                    user.getId(),
+                    check.get(index-1)
+            );
             CheckInEntity saveCheckIn = checkInEntityRepository.save(newCheckIn);
             saveCheckInList.add(saveCheckIn);
         }

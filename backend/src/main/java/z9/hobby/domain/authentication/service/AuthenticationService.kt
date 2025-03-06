@@ -1,17 +1,17 @@
-package z9.hobby.domain.authentication.service;
+package z9.hobby.domain.authentication.service
 
-import z9.hobby.domain.authentication.dto.AuthenticationRequest;
-import z9.hobby.domain.authentication.dto.AuthenticationResponse;
+import z9.hobby.domain.authentication.dto.AuthenticationRequest
+import z9.hobby.domain.authentication.dto.AuthenticationResponse
 
-public interface AuthenticationService {
+interface AuthenticationService {
 
-    AuthenticationResponse.UserToken login(AuthenticationRequest.Login dto);
+    fun login(dto: AuthenticationRequest.Login): AuthenticationResponse.UserToken
 
-    AuthenticationResponse.UserToken oauthLogin(String provider, String authCode);
+    fun oauthLogin(provider: String, authCode: String): AuthenticationResponse.UserToken
 
-    void signup(AuthenticationRequest.Signup signupDto);
+    fun signup(signupDto: AuthenticationRequest.Signup)
 
-    void logout(String userId);
+    fun logout(userId: String)
 
-    void resign(String userId);
+    fun resign(userId: String)
 }

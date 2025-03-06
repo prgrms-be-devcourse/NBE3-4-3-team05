@@ -1,96 +1,85 @@
-package z9.hobby.domain.user.dto;
+package z9.hobby.domain.user.dto
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import z9.hobby.domain.classes.entity.ClassEntity;
-import z9.hobby.model.schedules.SchedulesEntity;
-import z9.hobby.model.user.User;
+import z9.hobby.domain.classes.entity.ClassEntity
+import z9.hobby.model.schedules.SchedulesEntity
+import z9.hobby.model.user.User
+import java.time.format.DateTimeFormatter
 
-public class UserResponse {
+class UserResponse {
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class UserInfo {
-        private final String nickname;
-        private final String type;
-        private final String role;
-        private final String createdAt;
-        private final List<String> favorite;
-
-        public static UserInfo of(User user, List<String> favorite) {
-            String formattedDate = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            return UserInfo
-                    .builder()
-                    .nickname(user.getNickname())
-                    .type(user.getType().getValue())
-                    .role(user.getRole().getValue())
-                    .createdAt(formattedDate)
-                    .favorite(favorite)
-                    .build();
+    data class UserInfo(
+        val nickname: String,
+        val type: String,
+        val role: String,
+        val createdAt: String,
+        val favorite: List<String>
+    ) {
+        companion object {
+            fun of(user: User, favorite: List<String>): UserInfo {
+                val formattedDate = user.createdAt!!.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                return UserInfo(
+                    nickname = user.nickname,
+                    type = user.type.value,
+                    role = user.role.value,
+                    createdAt = formattedDate,
+                    favorite = favorite
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class UserSchedule {
-        private final List<ScheduleInfo> schedule;
-
-        public static UserSchedule from(List<ScheduleInfo> schedule) {
-            return UserSchedule.builder().schedule(schedule).build();
+    data class UserSchedule(
+        val schedule: List<ScheduleInfo>
+    ) {
+        companion object {
+            fun from(schedule: List<ScheduleInfo>): UserSchedule {
+                return UserSchedule(schedule = schedule)
+            }
         }
     }
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class ScheduleInfo {
-        private final Long classId;
-        private final String meetingTime; //yyyy-MM-dd
-        private final String meetingTitle;
-
-        public static ScheduleInfo from(SchedulesEntity schedulesEntity) {
-            return ScheduleInfo.builder()
-                    .classId(schedulesEntity.getClasses().getId())
-                    .meetingTime(schedulesEntity.getMeetingTime())
-                    .meetingTitle(schedulesEntity.getMeetingTitle())
-                    .build();
+    data class ScheduleInfo(
+        val classId: Long?,
+        val meetingTime: String,
+        val meetingTitle: String
+    ) {
+        companion object {
+            fun from(schedulesEntity: SchedulesEntity): ScheduleInfo {
+                return ScheduleInfo(
+                    classId = schedulesEntity.classes.id,
+                    meetingTime = schedulesEntity.meetingTime,
+                    meetingTitle = schedulesEntity.meetingTitle,
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class UserClass {
-        private final List<ClassInfo> classInfo;
-
-        public static UserClass from(List<ClassInfo> classInfo) {
-            return UserClass.builder().classInfo(classInfo).build();
+    // UserClass 클래스
+    data class UserClass(
+        val classInfo: List<ClassInfo>
+    ) {
+        companion object {
+            fun from(classInfo: List<ClassInfo>): UserClass {
+                return UserClass(classInfo = classInfo)
+            }
         }
     }
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class ClassInfo {
-        private final Long classId;
-        private final String name;
-        private final String description;
-        private final String favorite;
-
-        public static ClassInfo from(ClassEntity classEntity) {
-            return ClassInfo
-                    .builder()
-                    .classId(classEntity.getId())
-                    .name(classEntity.getName())
-                    .description(classEntity.getDescription())
-                    .favorite(classEntity.getFavorite())
-                    .build();
+    data class ClassInfo(
+        val classId: Long?,
+        val name: String,
+        val description: String,
+        val favorite: String
+    ) {
+        companion object {
+            fun from(classEntity: ClassEntity): ClassInfo {
+                return ClassInfo(
+                    classId = classEntity.id,
+                    name = classEntity.name,
+                    description = classEntity.description,
+                    favorite = classEntity.favorite
+                )
+            }
         }
     }
 }

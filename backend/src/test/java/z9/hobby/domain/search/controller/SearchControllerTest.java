@@ -115,7 +115,7 @@ class SearchControllerTest extends SearchBaseTest {
 
     // 로그인 토큰 발급 메서드
     private String getLoginToken(String email) throws Exception {
-        AuthenticationRequest.Login request = AuthenticationRequest.Login.of(email, TEST_PASSWORD);
+        AuthenticationRequest.Login request = new AuthenticationRequest.Login(email, TEST_PASSWORD);
         ResultActions result = mockMvc.perform(post("/api/v1/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));

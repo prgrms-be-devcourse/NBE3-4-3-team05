@@ -1,59 +1,31 @@
-package z9.hobby.domain.authentication.dto;
+package z9.hobby.domain.authentication.dto
 
-import jakarta.validation.constraints.Size;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import z9.hobby.global.annotation.validation.user.UserLoginId;
-import z9.hobby.global.annotation.validation.user.UserNickname;
-import z9.hobby.global.annotation.validation.user.UserPassword;
+import jakarta.validation.constraints.Size
+import z9.hobby.global.annotation.validation.user.UserLoginId
+import z9.hobby.global.annotation.validation.user.UserNickname
+import z9.hobby.global.annotation.validation.user.UserPassword
 
-public class AuthenticationRequest {
+class AuthenticationRequest {
 
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Login {
+    data class Login(
         @UserLoginId
-        private String loginId;
+        val loginId: String,
 
         @UserPassword
-        private String password;
+        val password: String
+    )
 
-        public static Login of(String loginId, String password) {
-            return new Login(loginId, password);
-        }
-    }
-
-    @Getter
-    @Builder(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Signup {
+    data class Signup(
         @UserLoginId
-        private String loginId;
+        val loginId: String,
 
         @UserPassword
-        private String password;
+        val password: String,
 
-        @Size(min = 1, message = "관심사는 하나 이상 등록되어야 합니다.")
-        private List<String> favorite;
+        @field:Size(min = 1, message = "관심사는 하나 이상 등록되어야 합니다.")
+        val favorite: List<String>,
 
         @UserNickname
-        private String nickname;
-
-        public static Signup of(String loginId, String password, List<String> favorite, String nickname) {
-            return Signup
-                    .builder()
-                    .loginId(loginId)
-                    .password(password)
-                    .favorite(favorite)
-                    .nickname(nickname)
-                    .build();
-        }
-    }
+        val nickname: String
+    )
 }

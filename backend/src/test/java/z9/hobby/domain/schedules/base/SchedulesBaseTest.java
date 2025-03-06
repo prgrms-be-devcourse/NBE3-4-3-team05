@@ -35,12 +35,13 @@ public abstract class SchedulesBaseTest extends SpringBootTestSupporter {
     }
 
     protected ClassEntity createTestClass(Long masterId) {
-        return classRepository.save(ClassEntity.builder()
-                .masterId(masterId)
-                .name("테스트 모임")
-                .favorite("취미")
-                .description("테스트 모임입니다")
-                .build());
+        return classRepository.save(new ClassEntity(
+                null,
+                "테스트 모임",
+                "취미",
+                "테스트 모임입니다",
+                masterId
+        ));
     }
 
     protected SchedulesEntity createTestSchedule(ClassEntity classEntity) {
@@ -54,10 +55,11 @@ public abstract class SchedulesBaseTest extends SpringBootTestSupporter {
     // 멤버 추가 공통 메서드
     protected void addMemberToClass(User member, ClassEntity classEntity) {
         ReflectionTestUtils.setField(classEntity, "users", new ArrayList<>());
-        ClassUserEntity classUser = ClassUserEntity.builder()
-                .classes(classEntity)
-                .userId(member.getId())
-                .build();
+        ClassUserEntity classUser = new ClassUserEntity(
+                null,
+                classEntity,
+                member.getId()
+        );
         classUserRepository.save(classUser);
         classEntity.getUsers().add(classUser);
     }

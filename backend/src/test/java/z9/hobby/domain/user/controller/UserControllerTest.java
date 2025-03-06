@@ -84,7 +84,7 @@ class UserControllerTest extends SpringBootTestSupporter {
         userFactory.saveUserFavorite(saveUser, saveFavoriteList);
 
         String changeNickname = "변경된닉네임";
-        UserRequest.PatchUserInfo request = UserRequest.PatchUserInfo.of(changeNickname, favoriteNameList);
+        UserRequest.PatchUserInfo request = new UserRequest.PatchUserInfo(changeNickname, favoriteNameList);
 
         // when
         ResultActions result = mockMvc.perform(patch("/api/v1/users/profile")

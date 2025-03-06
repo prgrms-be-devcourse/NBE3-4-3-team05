@@ -1,30 +1,23 @@
-package z9.hobby.domain.checkin.dto;
+package z9.hobby.domain.checkin.dto
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import z9.hobby.model.checkIn.CheckInEntity;
+import z9.hobby.model.checkIn.CheckInEntity
 
-
-public class CheckInResponseDto {
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class ResponseData {
-        private final Long checkInId;
-        private final Long scheduleId;
-        private final Long userId;
-        private final Boolean checkIn;
-        private final Boolean isCheckIn;
-
-        public static ResponseData from(CheckInEntity checkInEntity) {
-            return ResponseData.builder()
-                    .checkInId(checkInEntity.getId())
-                    .scheduleId(checkInEntity.getSchedules().getId())
-                    .userId(checkInEntity.getUserId())
-                    .checkIn(checkInEntity.isCheckIn())
-                    .isCheckIn(true)
-                    .build();
+data class CheckInResponseDto(
+    val checkInId: Long,
+    val scheduleId: Long,
+    val userId: Long,
+    val checkIn: Boolean,
+    val isCheckIn: Boolean
+) {
+    companion object {
+        fun from(checkInEntity: CheckInEntity): CheckInResponseDto {
+            return CheckInResponseDto(
+                checkInId = checkInEntity.id ?: throw IllegalArgumentException("ID cannot be null"),
+                scheduleId = checkInEntity.schedules?.id ?: throw IllegalArgumentException("Schedule ID cannot be null"),
+                userId = checkInEntity.userId,
+                checkIn = checkInEntity.checkIn,
+                isCheckIn = true
+            )
         }
     }
 }

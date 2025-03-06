@@ -12,7 +12,6 @@ import z9.hobby.domain.schedules.dto.SchedulesRequestDto;
 import z9.hobby.model.schedules.SchedulesEntity;
 import z9.hobby.model.user.User;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -181,7 +180,7 @@ class SchedulesControllerTest extends SchedulesBaseTest {
 
     // 공통 메서드
     private String loginAndGetToken(String email) throws Exception {
-        AuthenticationRequest.Login request = AuthenticationRequest.Login.of(email, SchedulesBaseTest.TEST_PASSWORD);
+        AuthenticationRequest.Login request = new AuthenticationRequest.Login(email, SchedulesBaseTest.TEST_PASSWORD);
         ResultActions result = mockMvc.perform(post("/api/v1/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));

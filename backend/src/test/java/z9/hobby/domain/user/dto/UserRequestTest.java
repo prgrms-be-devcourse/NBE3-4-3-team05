@@ -27,8 +27,8 @@ class UserRequestTest {
     @Test
     void PatchUserInfo() {
         // given
-        UserRequest.PatchUserInfo requestDto = UserRequest.PatchUserInfo.of("test",
-                List.of("관심사1", "관심사2"));
+        UserRequest.PatchUserInfo requestDto =
+                new UserRequest.PatchUserInfo("test", List.of("관심사1", "관심사2"));
 
         // when
         Set<ConstraintViolation<UserRequest.PatchUserInfo>> result = validator.validate(
@@ -42,7 +42,8 @@ class UserRequestTest {
     @Test
     void PatchUserInfo1() {
         // given
-        UserRequest.PatchUserInfo requestDto = UserRequest.PatchUserInfo.of("!", List.of());
+        UserRequest.PatchUserInfo requestDto =
+                new UserRequest.PatchUserInfo("!", List.of());
 
         // when
         Set<ConstraintViolation<UserRequest.PatchUserInfo>> result = validator.validate(

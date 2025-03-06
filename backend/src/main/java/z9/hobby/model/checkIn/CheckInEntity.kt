@@ -1,32 +1,25 @@
-package z9.hobby.model.checkIn;
+package z9.hobby.model.checkIn
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import z9.hobby.model.BaseEntity;
-import z9.hobby.model.schedules.SchedulesEntity;
+import jakarta.persistence.*
+import z9.hobby.model.BaseEntity
+import z9.hobby.model.schedules.SchedulesEntity
 
 @Entity
 @Table(name = "schedules_checkin")
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class CheckInEntity extends BaseEntity {
+data class CheckInEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sc_id", nullable = false)
-    private Long id;
+    val id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedules_id")
-    private SchedulesEntity schedules;
+    val schedules: SchedulesEntity? = null,
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    val userId: Long,
 
     @Column(name = "check_in", nullable = false)
-    private boolean checkIn;
-}
+    val checkIn: Boolean
+) : BaseEntity()
+

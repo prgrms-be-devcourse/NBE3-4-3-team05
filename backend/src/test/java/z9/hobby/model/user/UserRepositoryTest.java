@@ -3,7 +3,6 @@ package z9.hobby.model.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +19,10 @@ class UserRepositoryTest extends SpringBootTestSupporter {
         User saveUser = saveUserList.getFirst();
 
         // when
-        Optional<User> findOptionalData = userRepository.findByLoginId(saveUser.getLoginId());
+        User findData = userRepository.findByLoginId(saveUser.getLoginId());
 
         // then
-        assertThat(findOptionalData).isPresent();
-        User findData = findOptionalData.get();
+        assertThat(findData).isNotNull();
         assertThat(findData)
                 .extracting("loginId", "nickname", "status", "role", "id")
                 .containsExactly(
@@ -39,12 +37,10 @@ class UserRepositoryTest extends SpringBootTestSupporter {
         User saveUser = saveUserList.getFirst();
 
         // when
-        Optional<User> findOptionalData =
-                userRepository.findByLoginIdOrNickname(saveUser.getLoginId(), saveUser.getNickname());
+        User findData = userRepository.findByLoginIdOrNickname(saveUser.getLoginId(), saveUser.getNickname());
 
         // then
-        assertThat(findOptionalData).isPresent();
-        User findData = findOptionalData.get();
+        assertThat(findData).isNotNull();
         assertThat(findData)
                 .extracting("loginId", "nickname")
                 .containsExactly(saveUser.getLoginId(), saveUser.getNickname());
@@ -58,9 +54,9 @@ class UserRepositoryTest extends SpringBootTestSupporter {
         String nickname ="테스터";
 
         // when
-        Optional<User> findOptionalData = userRepository.findByLoginIdOrNickname(loginId, nickname);
+        User findData = userRepository.findByLoginIdOrNickname(loginId, nickname);
 
         // then
-        assertThat(findOptionalData).isEmpty();
+        assertThat(findData).isNull();
     }
 }

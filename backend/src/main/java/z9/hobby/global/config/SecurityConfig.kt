@@ -48,7 +48,7 @@ class SecurityConfig(
         configuration.exposedHeaders = listOf(ACCESS_TOKEN_HEADER)
         configuration.maxAge = 3600L
 
-        return CorsConfigurationSource { request -> configuration }
+        return CorsConfigurationSource { configuration }
     }
 
     @Bean

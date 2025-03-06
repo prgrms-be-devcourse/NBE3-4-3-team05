@@ -1,11 +1,11 @@
-package z9.hobby.domain.classes.repository;
+package z9.hobby.domain.classes.repository
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
-import z9.hobby.domain.classes.entity.ClassBlackListEntity;
+import org.springframework.data.jpa.repository.JpaRepository
+import z9.hobby.domain.classes.entity.ClassBlackListEntity
+import java.util.*
 
-public interface ClassBlackListRepository extends JpaRepository<ClassBlackListEntity, Long> {
-    boolean existsByClasses_IdAndUserId(Long classId, Long currentUserId);
+interface ClassBlackListRepository : JpaRepository<ClassBlackListEntity, Long> {
+    fun existsByClasses_IdAndUserId(classId: Long, currentUserId: Long): Boolean
 
-    Optional<ClassBlackListEntity> findByClassesIdAndUserId(Long classId, Long userId);
+    fun findByClassesIdAndUserId(classId: Long, userId: Long): Optional<ClassBlackListEntity>
 }

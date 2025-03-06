@@ -1,126 +1,120 @@
-package z9.hobby.domain.classes.dto;
+package z9.hobby.domain.classes.dto
 
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import z9.hobby.domain.classes.entity.ClassEntity;
-import z9.hobby.model.user.User;
+import com.fasterxml.jackson.annotation.JsonProperty
+import z9.hobby.domain.classes.entity.ClassEntity
+import z9.hobby.model.user.User
 
-public class ClassResponse {
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class ClassResponseData {
-        private final Long id;
-        private final String name;
-        private final String favorite;
-        private final String description;
-
-        public static ClassResponseData from(ClassEntity classes) {
-            return ClassResponseData
-                    .builder()
-                    .id(classes.getId())
-                    .name(classes.getName())
-                    .favorite(classes.getFavorite())
-                    .description(classes.getDescription())
-                    .build();
+class ClassResponse {
+    data class ClassResponseData(
+        val id: Long?,
+        val name: String,
+        val favorite: String,
+        val description: String
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(classes: ClassEntity): ClassResponseData {
+                return ClassResponseData(
+                    id = classes.id,
+                    name = classes.name,
+                    favorite = classes.favorite,
+                    description = classes.description
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class EntryResponseData {
-        private final String name;
-        private final String favorite;
-        private final String description;
-
-        public static EntryResponseData from(ClassEntity classes) {
-            return EntryResponseData.builder()
-                    .name(classes.getName())
-                    .favorite(classes.getFavorite())
-                    .description(classes.getDescription())
-                    .build();
+    data class EntryResponseData(
+        val name: String,
+        val favorite: String,
+        val description: String
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(classes: ClassEntity): EntryResponseData {
+                return EntryResponseData(
+                    name = classes.name,
+                    favorite = classes.favorite,
+                    description = classes.description
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class JoinResponseData {
-        private final Long id;
-        private final String name;
-
-        public static JoinResponseData from(ClassEntity classes) {
-            return JoinResponseData
-                    .builder()
-                    .id(classes.getId())
-                    .name(classes.getName())
-                    .build();
+    data class JoinResponseData(
+        val id: Long?,
+        val name: String
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(classes: ClassEntity): JoinResponseData {
+                return JoinResponseData(
+                    id = classes.id,
+                    name = classes.name
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class ClassUserListData {
-        private final Long classId;
-        private final String name;
-        private final Long masterId;
-        private final List<ClassUserInfo> userList;
-
-        public static ClassUserListData from(ClassEntity classes, List<User> users) {
-            return ClassUserListData.builder()
-                    .classId(classes.getId())
-                    .name(classes.getName())
-                    .masterId(classes.getMasterId())
-                    .userList(users.stream()
-                            .map(ClassUserInfo::from)
-                            .toList())
-                    .build();
+    data class ClassUserListData(
+        val classId: Long?,
+        val name: String,
+        val masterId: Long?,
+        val userList: List<ClassUserInfo>
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(classes: ClassEntity, users: List<User>): ClassUserListData {
+                return ClassUserListData(
+                    classId = classes.id,
+                    name = classes.name,
+                    masterId = classes.masterId,
+                    userList = users.map { ClassUserInfo.from(it) }
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class ClassUserInfo {
-        private final Long userId;
-        private final String nickName;
-
-        public static ClassUserInfo from(User user) {
-            return ClassUserInfo.builder()
-                    .userId(user.getId())
-                    .nickName(user.getNickname())
-                    .build();
+    data class ClassUserInfo(
+        val userId: Long?,
+        val nickName: String
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(user: User): ClassUserInfo {
+                return ClassUserInfo(
+                    userId = user.id,
+                    nickName = user.nickname
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class CheckMemberData {
-        private final boolean isMember;
-
-        public static CheckMemberData from(boolean isMember) {
-            return CheckMemberData.builder()
-                    .isMember(isMember)
-                    .build();
+    class CheckMemberData(
+        @JsonProperty("member")
+        val isMember: Boolean
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(isMember: Boolean): CheckMemberData {
+                return CheckMemberData(
+                    isMember = isMember
+                )
+            }
         }
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class CheckBlackListData {
-        private final boolean isBlackListed;
-
-        public static CheckBlackListData from(boolean isBlackListed) {
-            return CheckBlackListData.builder()
-                    .isBlackListed(isBlackListed)
-                    .build();
+    data class CheckBlackListData(
+        @JsonProperty("blackListed")
+        val isBlackListed: Boolean
+    ) {
+        companion object {
+            @JvmStatic
+            fun from(isBlackListed: Boolean): CheckBlackListData {
+                return CheckBlackListData(
+                    isBlackListed = isBlackListed
+                )
+            }
         }
     }
 }

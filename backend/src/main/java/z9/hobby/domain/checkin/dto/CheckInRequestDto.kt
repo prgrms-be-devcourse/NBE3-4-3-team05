@@ -1,21 +1,11 @@
-package z9.hobby.domain.checkin.dto;
+package z9.hobby.domain.checkin.dto
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull
 
-public class CheckInRequestDto {
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class CheckInDto {
-        @NotNull(message = "Schedule ID must not be null")
-        private Long scheduleId;
+data class CheckInRequestDto(
+    @field:NotNull(message = "Schedule ID must not be null")
+    val scheduleId: Long? = null,
 
-        @NotNull(message = "Check-in status must not be null")
-        private Boolean checkIn;
-    }
-}
+    @field:NotNull(message = "Check-in status must not be null")
+    val checkIn: Boolean? = null
+)
