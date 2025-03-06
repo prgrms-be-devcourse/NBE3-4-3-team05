@@ -46,9 +46,10 @@ public abstract class SearchBaseTest extends SpringBootTestSupporter {
 
     // 관심사 생성
     protected FavoriteEntity createTestFavorite(String name) {
-        return favoriteRepository.save(FavoriteEntity.builder()
-                .name(name)
-                .build());
+        return favoriteRepository.save(new FavoriteEntity(
+                null,
+                name
+        ));
     }
 
     // 사용자에게 관심사 추가
