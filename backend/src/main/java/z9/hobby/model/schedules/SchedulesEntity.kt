@@ -39,6 +39,7 @@ class SchedulesEntity(
     }
     // Builder pattern implementation in Kotlin
     companion object {
+        @JvmStatic
         fun builder() = Builder()
     }
 
