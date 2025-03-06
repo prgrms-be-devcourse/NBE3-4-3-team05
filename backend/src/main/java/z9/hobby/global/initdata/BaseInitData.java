@@ -13,8 +13,6 @@ import z9.hobby.domain.classes.repository.ClassRepository;
 import z9.hobby.domain.classes.repository.ClassUserRepository;
 import z9.hobby.domain.favorite.entity.FavoriteEntity;
 import z9.hobby.domain.favorite.repository.FavoriteRepository;
-import z9.hobby.model.sample.SampleEntity;
-import z9.hobby.model.sample.SampleRepository;
 import z9.hobby.model.schedules.SchedulesEntity;
 import z9.hobby.model.schedules.SchedulesRepository;
 import z9.hobby.model.user.User;
@@ -32,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BaseInitData {
 
-    private final SampleRepository sampleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FavoriteRepository favoriteRepository;
@@ -44,7 +41,6 @@ public class BaseInitData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     void init() {
-        List<SampleEntity> sampleData = createSampleData(10);
         List<FavoriteEntity> saveFavoriteData = createFavoriteData(); // 먼저 관심사 생성
         List<User> savedUserData = createUserData(10);
         List<ClassEntity> savedClassData = createClassData(10, savedUserData);
@@ -66,26 +62,6 @@ public class BaseInitData {
         }
 
         return savedUserFavoriteData;
-    }
-
-    private List<SampleEntity> createSampleData(final int count) {
-        if (sampleRepository.count() != 0) {
-            return sampleRepository.findAll();
-        }
-        if (count == 0) {
-            return null;
-        }
-
-        List<SampleEntity> savedDataList = new ArrayList<>();
-        for (int i = 1; i <= count; i++) {
-            String firstName = "김";
-            String secondName = String.format("%s%d", "아무개", i);
-            SampleEntity sample = SampleEntity.builder().firstName(firstName).secondName(secondName)
-                    .age(i).build();
-            savedDataList.add(sampleRepository.save(sample));
-        }
-
-        return savedDataList;
     }
 
     private List<User> createUserData(final int count) {
