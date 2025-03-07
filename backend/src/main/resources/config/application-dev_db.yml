@@ -9,7 +9,7 @@ spring:
 #      maximum-pool-size: 5
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
@@ -21,10 +21,10 @@ spring:
 #        show_sql: true
         use_sql_comments: true
     open-in-view: false
-#logging:
-#  level:
-#    org.hibernate.sql: debug
-#    org.hibernate.type: trace
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
 
 redis:
   host : ${Z9_REDIS_DB_HOST}

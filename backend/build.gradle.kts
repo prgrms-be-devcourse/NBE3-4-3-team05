@@ -4,6 +4,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
 }
 
 val springCloudVersion = "2024.0.0"
@@ -69,6 +70,13 @@ dependencies {
     // 코프링
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    // Micrometer Core
+    implementation("io.micrometer:micrometer-core")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+
+    // Actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 dependencyManagement {

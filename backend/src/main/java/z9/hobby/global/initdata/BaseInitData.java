@@ -13,8 +13,6 @@ import z9.hobby.domain.classes.repository.ClassRepository;
 import z9.hobby.domain.classes.repository.ClassUserRepository;
 import z9.hobby.domain.favorite.entity.FavoriteEntity;
 import z9.hobby.domain.favorite.repository.FavoriteRepository;
-import z9.hobby.model.sample.SampleEntity;
-import z9.hobby.model.sample.SampleRepository;
 import z9.hobby.model.schedules.SchedulesEntity;
 import z9.hobby.model.schedules.SchedulesRepository;
 import z9.hobby.model.user.User;
@@ -32,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BaseInitData {
 
-    private final SampleRepository sampleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FavoriteRepository favoriteRepository;
@@ -44,7 +41,6 @@ public class BaseInitData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     void init() {
-        List<SampleEntity> sampleData = createSampleData(10);
         List<FavoriteEntity> saveFavoriteData = createFavoriteData(); // 먼저 관심사 생성
         List<User> savedUserData = createUserData(10);
         List<ClassEntity> savedClassData = createClassData(10, savedUserData);
@@ -66,26 +62,6 @@ public class BaseInitData {
         }
 
         return savedUserFavoriteData;
-    }
-
-    private List<SampleEntity> createSampleData(final int count) {
-        if (sampleRepository.count() != 0) {
-            return sampleRepository.findAll();
-        }
-        if (count == 0) {
-            return null;
-        }
-
-        List<SampleEntity> savedDataList = new ArrayList<>();
-        for (int i = 1; i <= count; i++) {
-            String firstName = "김";
-            String secondName = String.format("%s%d", "아무개", i);
-            SampleEntity sample = SampleEntity.builder().firstName(firstName).secondName(secondName)
-                    .age(i).build();
-            savedDataList.add(sampleRepository.save(sample));
-        }
-
-        return savedDataList;
     }
 
     private List<User> createUserData(final int count) {
@@ -139,26 +115,28 @@ public class BaseInitData {
 
         for (int i = 1; i <= count; i++) {
             // 각 클래스의 모임장을 users 리스트에서 순차적으로 설정
-            Long masterId = users.get(i-1).getId();
+            Long masterId = users.get(i - 1).getId();
 
             // favorites 리스트에서 순환하면서 관심사를 선택 (인덱스가 넘어가면 처음부터 다시)
-            String favorite = favorites.get((i-1) % favorites.size()).getName();
+            String favorite = favorites.get((i - 1) % favorites.size()).getName();
 
-            ClassEntity classEntity = ClassEntity.builder()
-                    .name("테스트 모임" + i)
-                    .favorite(favorite)
-                    .description("테스트 모임" + i + "의 설명입니다.")
-                    .masterId(masterId)
-                    .build();
+            ClassEntity classEntity = new ClassEntity(
+                    null,
+                    "테스트 모임" + i,
+                    favorite,
+                    "테스트 모임" + i + "의 설명입니다.",
+                    masterId
+            );
 
             ClassEntity savedClass = classRepository.save(classEntity);
             savedClassList.add(savedClass);
 
             // 모임장을 ClassUser로 추가
-            ClassUserEntity classUser = ClassUserEntity.builder()
-                    .classes(savedClass)
-                    .userId(masterId)
-                    .build();
+            ClassUserEntity classUser = new ClassUserEntity(
+                    null,
+                    savedClass,
+                    masterId
+            );
             classUserRepository.save(classUser);
         }
 

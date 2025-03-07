@@ -34,19 +34,22 @@ public abstract class SearchBaseTest extends SpringBootTestSupporter {
 
     // 테스트 모임 생성
     protected ClassEntity createTestClass(Long masterId, String favorite) {
-        return classRepository.save(ClassEntity.builder()
-                .masterId(masterId)
-                .name("테스트 모임")
-                .favorite(favorite)
-                .description("테스트 모임입니다")
-                .build());
+        return classRepository.save(new ClassEntity(
+                        null,
+                        "테스트 모임",
+                        favorite,
+                        "테스트 모임입니다",
+                        masterId
+                )
+        );
     }
 
     // 관심사 생성
     protected FavoriteEntity createTestFavorite(String name) {
-        return favoriteRepository.save(FavoriteEntity.builder()
-                .name(name)
-                .build());
+        return favoriteRepository.save(new FavoriteEntity(
+                null,
+                name
+        ));
     }
 
     // 사용자에게 관심사 추가
@@ -58,9 +61,10 @@ public abstract class SearchBaseTest extends SpringBootTestSupporter {
 
     // 모임에 멤버 추가
     protected void addMemberToClass(User member, ClassEntity classEntity) {
-        classUserRepository.save(ClassUserEntity.builder()
-                .classes(classEntity)
-                .userId(member.getId())
-                .build());
+        classUserRepository.save(new ClassUserEntity(
+                null,
+                classEntity,
+                member.getId()
+        ));
     }
 }

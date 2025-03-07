@@ -42,7 +42,7 @@ class CheckInServiceImplTest extends SpringBootTestSupporter {
         List<SchedulesEntity> saveSchedulesList = schedulesFactory.saveAndCreateClassData(1, saveClass);
         SchedulesEntity saveSchedule = saveSchedulesList.getFirst();
 
-        CheckInRequestDto.CheckInDto request = new CheckInRequestDto.CheckInDto(
+        CheckInRequestDto request = new CheckInRequestDto(
                 saveSchedule.getId(), true);
 
         // 체크인 등록
@@ -79,7 +79,7 @@ class CheckInServiceImplTest extends SpringBootTestSupporter {
         List<SchedulesEntity> saveSchedulesList = schedulesFactory.saveAndCreateClassData(1, saveClass);
         SchedulesEntity saveSchedule = saveSchedulesList.getFirst();
 
-        CheckInRequestDto.CheckInDto request = new CheckInRequestDto.CheckInDto(
+        CheckInRequestDto request = new CheckInRequestDto(
                 saveSchedule.getId(), true);
 
         // 체크인 등록
@@ -127,9 +127,9 @@ class CheckInServiceImplTest extends SpringBootTestSupporter {
         SchedulesEntity saveSchedule = saveSchedulesList.getFirst();
 
         // when
-        CheckInResponseDto.ResponseData result = checkInService.getMyCheckIn(saveSchedule.getId(), saveUser.getId());
+        CheckInResponseDto result = checkInService.getMyCheckIn(saveSchedule.getId(), saveUser.getId());
 
         // then
-        assertThat(result.getIsCheckIn()).isFalse();
+        assertThat(result.getCheckIn()).isFalse();
     }
 }

@@ -2,6 +2,10 @@ name: Build Test
 
 on:
   pull_request:
+    paths:
+      - 'backend/src/**'
+      - 'backend/build.gradle'
+      - 'backend/build.gradle.kts'
 #    branches:
 #      - dev
 
@@ -16,7 +20,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew

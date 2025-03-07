@@ -1,0 +1,35 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hobbyDb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: ${MYSQL_TIME_ZONE}
+      EXPORTER_NAME: ${EXPORTER_NAME}
+      EXPORTER_PASSWORD: ${EXPORTER_PASSWORD}
+    ports:
+      - ${MYSQL_OUT_PORT}:${MYSQL_IN_PORT}
+    networks:
+      - z9-network
+    volumes:
+      - ./mysql/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./mysql/my.cnf:/etc/my.cnf
+      - ${MYSQL_QUERY_LOG_PATH}:/var/log/mysql
+      - hobby-rdb-data:/var/lib/mysql
+
+  redis:
+    image: bitnami/redis:latest
+    container_name: hobbyRedisDb
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_OUT_PORT}:${REDIS_IN_PORT}
+    networks:
+      - z9-network
+
+networks:
+  z9-network:
+    external: true
+
+volumes:
+  hobby-rdb-data:

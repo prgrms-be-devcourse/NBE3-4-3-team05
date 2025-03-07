@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +31,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
 
         // when
         AuthenticationResponse.UserToken userToken = authenticationService.login(
-                AuthenticationRequest.Login.of(saveUser.getLoginId(), UserFactory.USER_LOGIN_PASSWORD));
+                new AuthenticationRequest.Login(saveUser.getLoginId(), UserFactory.USER_LOGIN_PASSWORD));
 
         // then
         assertThat(userToken.getAccessToken())
@@ -49,7 +48,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         String password = "!test1234";
 
         // when // then
-        assertThatThrownBy(() -> authenticationService.login(AuthenticationRequest.Login.of(loginId, password)))
+        assertThatThrownBy(() -> authenticationService.login(new AuthenticationRequest.Login(loginId, password)))
                 .isInstanceOf(CustomException.class)
                 .extracting("code")
                 .isEqualTo(ErrorCode.LOGIN_FAIL);
@@ -65,7 +64,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         userRepository.save(resignUser);
 
         // when // then
-        assertThatThrownBy(() -> authenticationService.login(AuthenticationRequest.Login.of(
+        assertThatThrownBy(() -> authenticationService.login(new AuthenticationRequest.Login(
                 "test1@email.com", UserFactory.USER_LOGIN_PASSWORD)))
                 .isInstanceOf(CustomException.class)
                 .extracting("code")
@@ -76,10 +75,10 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
     @Test
     void login4() {
         // given
-        List<User> saveUserList = userFactory.saveAndCreateUserData(1);
+        userFactory.saveAndCreateUserData(1);
 
         // when // then
-        assertThatThrownBy(() -> authenticationService.login(AuthenticationRequest.Login.of(
+        assertThatThrownBy(() -> authenticationService.login(new AuthenticationRequest.Login(
                 "test1@email.com", "NOT_PASSWORD")))
                 .isInstanceOf(CustomException.class)
                 .extracting("code")
@@ -98,15 +97,14 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         String password = "!test1234";
         List<String> favorite = saveFavoriteNameList;
         String nickname = "test1";
-        AuthenticationRequest.Signup signupDto = AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+        AuthenticationRequest.Signup signupDto = new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when
         authenticationService.signup(signupDto);
 
         // then
-        Optional<User> findOptionalData = userRepository.findByLoginId(loginId);
-        assertThat(findOptionalData).isPresent();
-        User findData = findOptionalData.get();
+        User findData = userRepository.findByLoginId(loginId);
+        assertThat(findData).isNotNull();
         assertThat(findData)
                 .extracting("loginId", "nickname", "type", "status", "role")
                 .containsExactly(loginId, nickname, UserType.NORMAL, UserStatus.ACTIVE, UserRole.ROLE_USER);
@@ -130,7 +128,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         List<String> favorite = saveFavoriteNameList;
         String nickname = "중복 없는 닉네임";
         AuthenticationRequest.Signup signupDto =
-                AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+                new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when // then
         assertThatThrownBy(() -> authenticationService.signup(signupDto))
@@ -157,7 +155,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         List<String> favorite = saveFavoriteNameList;
         String nickname = saveUser.getNickname();
         AuthenticationRequest.Signup signupDto =
-                AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+                new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when // then
         assertThatThrownBy(() -> authenticationService.signup(signupDto))
@@ -176,7 +174,7 @@ class AuthenticationServiceImplTest extends SpringBootTestSupporter {
         String nickname = "test1";
 
         AuthenticationRequest.Signup signupDto =
-                AuthenticationRequest.Signup.of(loginId, password, favorite, nickname);
+                new AuthenticationRequest.Signup(loginId, password, favorite, nickname);
 
         // when // then
         assertThatThrownBy(() -> authenticationService.signup(signupDto))
