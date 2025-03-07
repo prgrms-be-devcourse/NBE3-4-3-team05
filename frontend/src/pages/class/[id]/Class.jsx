@@ -6,6 +6,7 @@ import Modal from "../../../components/modal/Modal";
 import Alert from "../../../components/alert/Alert";
 import CustomList from "../../../components/customList/CustomList";
 import DateTimeInput from "../../../components/dateTimeInput/DateTimeInput";
+import Address from 'src/components/address/Address';
 
 import { ClassService } from "../../../services/ClassService";
 import { ScheduleService } from "../../../services/SheduleService";
@@ -29,6 +30,12 @@ const Class = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [isDetailModal, setIsDetailModal] = useState(false);
   const cacheRef = useRef(responseCache);
+  const [addressInfo, setAddressInfo] = useState({
+    address: '',
+    detailAddress: '',
+    lat: '',
+    lng: ''
+  });
 
   const handleMeetingTimeChange = useCallback((formattedDateTime) => {
     setMeetingTime(formattedDateTime);
@@ -146,6 +153,9 @@ const Class = () => {
       classId: id,
       meetingTime: meetingTime,
       meetingTitle: meetingTitle,
+      address: `${addressInfo.address} ${addressInfo.detailAddress}`,
+      lat: addressInfo.lat,
+      lng: addressInfo.lng
     };
     try {
       const response = await ScheduleService.postSchedulesLists(body);
@@ -202,6 +212,10 @@ const Class = () => {
       }, 1000),
       []
   );
+
+  const handleAddressSelect = (data) => {
+    setAddressInfo(data);
+  };
 
 
   return (
@@ -288,6 +302,7 @@ const Class = () => {
                 placeholder="일정 제목을 입력하세요"
             />
             <DateTimeInput onMeetingTimeChange={handleMeetingTimeChange} />
+            <Address onAddressSelect={handleAddressSelect} />
             <button className="custom-button" onClick={handlerCreateSchedule}>
               생성하기
             </button>
