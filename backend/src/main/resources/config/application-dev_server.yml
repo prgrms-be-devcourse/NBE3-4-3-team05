@@ -1,12 +1,6 @@
 server:
   address: 0.0.0.0
   port: 8080
-  tomcat:
-    threads:
-      max: 200 #default : 200
-      min-spare: 10 #default : 10
-    max-connections: 10000 #default : 10000
-    accept-count: 100 #default : 100
   servlet:
     context-path: /
     encoding:

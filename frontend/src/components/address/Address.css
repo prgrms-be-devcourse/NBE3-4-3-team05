@@ -1,0 +1,14 @@
+.addressSearch input {
+    height: 40px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.addressSearch input:not(:first-child) {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.addressSearch button {
+    margin-left: 10px;
+}
