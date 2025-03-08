@@ -2,6 +2,7 @@
 ## 설치 방법
 ### .env 생성
 - `.env` 파일을 생성하고, 아래 필수 값들을 입력해줍니다.
+- `.env` 파일은 docker-compose 파일과 같은 경로에 생성합니다.
 ```
 MYSQL_ROOT_PASSWORD={패스워드}
 MYSQL_OUT_PORT={외부 접근 포트 / Number}
@@ -25,11 +26,11 @@ REDIS_IN_PORT={REDIS 내부 접근 포트 / Number}
 - Docker 생성과 실행을 확인합니다.
 - `docker ps`
 
-### 컨테이너 종료
-- `docker-compose down`
+### 컨테이너 삭제
+- `docker compose -f db-docker-compose.yml -p database down`
 - 만약, table 의 구성(속성 등)을 변경 하거나, 신규 테이블 생성을 하려면, `init.sh` 의 내용을 수정하고, 볼륨을 삭제해야 합니다.
 - 단, 볼륨을 삭제하게 되면, 기존 데이터는 모두 삭제되므로, 백업을 잘 처리해야 합니다.
-- `docker-compose down -v`
+- `docker compose -f db-docker-compose.yml -p database down -v`
 
 ### 옵션들
 - 기본적으로, `Slow Query Logging` 옵션이 1초로 켜져있습니다.
