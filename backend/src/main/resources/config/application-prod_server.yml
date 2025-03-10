@@ -18,3 +18,19 @@ server:
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 10s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["health", "info", "prometheus", "metrics"]
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name:my-app}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
