@@ -36,6 +36,14 @@ class SearchControllerTest extends SearchBaseTest {
 
         // 4. 테스트 모임 생성
         class1 = createTestClass(user.getId(), "운동");
+
+        // 5. 시간 차이 생성
+        try {
+            Thread.sleep(100); // 100ms 대기
+        } catch (InterruptedException e) {
+            // 무시
+        }
+
         class2 = createTestClass(user.getId(), "음악");
     }
 
