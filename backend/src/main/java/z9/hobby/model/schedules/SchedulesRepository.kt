@@ -24,4 +24,33 @@ interface SchedulesRepository : JpaRepository<SchedulesEntity, Long> {
                 "ORDER BY s.meetingTime DESC")
     )
     fun findUserSchedulesInfoByUserId(@Param("userId") userId: Long): List<SchedulesEntity>
+
+    @Query(
+        ("SELECT s FROM SchedulesEntity s " +
+                "WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat " +
+                "AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng)")
+    )
+    fun findByLatLng(
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double
+    ): List<SchedulesEntity>
+
+    @Query(
+        "SELECT s FROM SchedulesEntity s JOIN FETCH s.classes c " +
+                "WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat " +
+                "AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng) " +
+                "AND c.favorite IN (" +
+                "    SELECT f.name FROM FavoriteEntity f, UserFavorite uf " +
+                "    WHERE uf.favorite.id = f.id AND uf.user.id = :userId" +
+                ")"
+    )
+    fun findFavoriteSchedulesByUserId(
+        @Param("userId") userId: Long,
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double
+    ): List<SchedulesEntity>
 }
