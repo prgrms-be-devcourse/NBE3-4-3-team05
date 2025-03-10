@@ -1,0 +1,40 @@
+# Authentication Domain Performance Test
+# 최적: 100ms 이하 (즉각적인 응답)
+# ✅ 양호: 200ms 이하 (대부분의 사용자에게 원활하게 느껴짐)
+# 허용 가능: 500ms 이하 (약간의 지연이 있더라도 사용자에게 큰 불편을 주지 않음)
+# 주의: 1초 이상 (사용자 경험에 큰 영향을 줄 수 있음, 반응이 느리다고 느껴짐)
+
+config:
+  target: http://127.0.0.1:8080
+  payload:
+    - path : "./csv/id-password.csv"
+      fields :
+        - "loginId"
+        - "password"
+    - path: "./csv/signup.csv"
+      fields:
+        - "newLoginId"
+        - "newPassword"
+        - "newNickname"
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      name: Sustained
+
+scenarios:
+  - name: "Authentication Domain Performance Test"
+    flow:
+      # 로그인
+      - post:
+          url: "/api/v1/login"
+          json:
+            loginId: "{{ loginId }}"
+            password : "{{ password }}"
+      # 회원가입
+      - post:
+          url: "/api/v1/signup"
+          json:
+            loginId: "{{ newLoginId }}"
+            password: "{{ newPassword }}"
+            favorite: ["코딩"]
+            nickname: "{{ newNickname }}"
