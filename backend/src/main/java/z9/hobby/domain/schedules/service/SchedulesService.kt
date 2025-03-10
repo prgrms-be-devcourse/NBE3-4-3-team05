@@ -26,7 +26,7 @@ class SchedulesService(
     //생성
     @Transactional
     fun create(requestData: CreateRequest, userId: Long): SchedulesResponseDto.ResponseData {
-        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank()) {
+        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank() || requestData.meetingPlace.isNullOrBlank()) {
             throw CustomException(ErrorCode.SCHEDULE_CREATE_FAILED)
         }
 
@@ -56,6 +56,9 @@ class SchedulesService(
                 .classes(classes)
                 .meetingTime(requestData.meetingTime)
                 .meetingTitle(requestData.meetingTitle)
+                .meetingPlace(requestData.meetingPlace)
+                .latitude(requestData.latitude)
+                .longitude(requestData.longitude)
                 .build()
 
             // DB에 저장
@@ -80,7 +83,7 @@ class SchedulesService(
         requestData: UpdateRequest,
         userId: Long?
     ): SchedulesResponseDto.ResponseData {
-        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank()) {
+        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank() || requestData.meetingPlace.isNullOrBlank()) {
             throw CustomException(ErrorCode.SCHEDULE_UPDATE_FAILED)
         }
 
@@ -106,7 +109,7 @@ class SchedulesService(
             }
 
             // 일정 정보 업데이트
-            schedule.updateSchedule(requestData.meetingTime, requestData.meetingTitle)
+            schedule.updateSchedule(requestData.meetingTime, requestData.meetingTitle, requestData.meetingPlace, requestData.latitude, requestData.longitude)
             // DB에 저장
             val savedSchedule = schedulesRepository.save(schedule)
 
