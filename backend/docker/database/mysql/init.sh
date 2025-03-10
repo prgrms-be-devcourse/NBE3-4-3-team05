@@ -116,7 +116,8 @@ CREATE TABLE \`schedules_checkin\` (
   \`schedules_id\` bigint DEFAULT NULL,
   PRIMARY KEY (\`sc_id\`),
   CONSTRAINT \`FK_schedules_checkin_schedules_id\` FOREIGN KEY (\`schedules_id\`) REFERENCES \`schedules\` (\`schedules_id\`),
-  KEY \`IDX_schedules_checkin_schedules_id\` (\`schedules_id\`)
+  KEY \`IDX_schedules_checkin_schedules_id\` (\`schedules_id\`),
+  INDEX \`idx_user_checkin_user_id_check_in\` (\`user_id\`,\`check_in\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Exporter 사용자 생성
