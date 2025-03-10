@@ -41,10 +41,10 @@ class SchedulesRequestDto {
         val meetingPlace: String? = null,
 
         @field:NotNull(message = "latitude must not be null")
-        val latitude: Double? = null,
+        val lat: Double? = null,
 
         @field:NotNull(message = "longitude must not be null")
-        val longitude: Double? = null
+        val lng: Double? = null
     ) {
         companion object {
             @JvmStatic
@@ -56,23 +56,23 @@ class SchedulesRequestDto {
             private var meetingTime: String? = null
             private var meetingTitle: String? = null
             private var meetingPlace: String? = null
-            private var latitude: Double? = null
-            private var longitude: Double? = null
+            private var lat: Double? = null
+            private var lng: Double? = null
 
             fun classId(classId: Long?) = apply { this.classId = classId }
             fun meetingTime(meetingTime: String?) = apply { this.meetingTime = meetingTime }
             fun meetingTitle(meetingTitle: String?) = apply { this.meetingTitle = meetingTitle }
             fun meetingPlace(meetingPlace: String?) = apply { this.meetingPlace = meetingPlace }
-            fun latitude(latitude: Double?) = apply { this.latitude = latitude }
-            fun longitude(longitude: Double?) = apply { this.longitude = longitude }
+            fun lat(lat: Double?) = apply { this.lat = lat }
+            fun lng(lng: Double?) = apply { this.lng = lng }
 
             fun build() = CreateRequest(
                 classId = classId,
                 meetingTime = meetingTime,
                 meetingTitle = meetingTitle,
                 meetingPlace = meetingPlace,
-                latitude = latitude,
-                longitude = longitude
+                lat = lat,
+                lng = lng
             )
         }
     }
@@ -111,10 +111,10 @@ class SchedulesRequestDto {
         val meetingPlace: String? = null,
 
         @field:NotNull(message = "latitude must not be null")
-        val latitude: Double? = null,
+        val lat: Double? = null,
 
         @field:NotNull(message = "longitude must not be null")
-        val longitude: Double? = null
+        val lng: Double? = null
     ) {
         companion object {
             @JvmStatic
@@ -125,21 +125,21 @@ class SchedulesRequestDto {
             private var meetingTime: String? = null
             private var meetingTitle: String? = null
             private var meetingPlace: String? = null
-            private var latitude: Double? = null
-            private var longitude: Double? = null
+            private var lat: Double? = null
+            private var lng: Double? = null
 
             fun meetingTime(meetingTime: String?) = apply { this.meetingTime = meetingTime }
             fun meetingTitle(meetingTitle: String?) = apply { this.meetingTitle = meetingTitle }
             fun meetingPlace(meetingPlace: String?) = apply { this.meetingPlace = meetingPlace }
-            fun latitude(latitude: Double?) = apply { this.latitude = latitude }
-            fun longitude(longitude: Double?) = apply { this.longitude = longitude }
+            fun lat(lat: Double?) = apply { this.lat = lat }
+            fun lng(lng: Double?) = apply { this.lng = lng }
 
             fun build() = UpdateRequest(
                 meetingTime = meetingTime,
                 meetingTitle = meetingTitle,
                 meetingPlace = meetingPlace,
-                latitude = latitude,
-                longitude = longitude
+                lat = lat,
+                lng = lng
             )
         }
     }

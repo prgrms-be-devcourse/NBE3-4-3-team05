@@ -153,7 +153,7 @@ const Class = () => {
       classId: id,
       meetingTime: meetingTime,
       meetingTitle: meetingTitle,
-      address: `${addressInfo.address} ${addressInfo.detailAddress}`,
+      meetingPlace: `${addressInfo.address} ${addressInfo.detailAddress}`,
       lat: addressInfo.lat,
       lng: addressInfo.lng
     };
@@ -255,6 +255,7 @@ const Class = () => {
                   data1={schedule?.scheduleId}
                   data2={schedule?.meetingTitle}
                   data3={schedule?.meetingTime}
+                  data5={schedule?.meetingPlace}
                   description="true"
                   button1 ="참석"
                   onClick1={()=>debouncedHandleCheckIn(schedule?.scheduleId,true)}

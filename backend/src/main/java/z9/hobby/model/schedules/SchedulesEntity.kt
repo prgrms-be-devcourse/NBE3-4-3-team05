@@ -26,11 +26,11 @@ class SchedulesEntity(
     @Column(name = "meeting_place", nullable = false)
     private var meetingPlace: String? = null,
 
-    @Column(name = "latitude", nullable = false)
-    private var latitude: Double? = null,
+    @Column(name = "lat", nullable = false)
+    private var lat: Double? = null,
 
-    @Column(name = "longitude", nullable = false)
-    private var longitude: Double? = null,
+    @Column(name = "lng", nullable = false)
+    private var lng: Double? = null,
 
     @OneToMany(mappedBy = "schedules", cascade = [CascadeType.ALL], orphanRemoval = true)
     private var checkins: MutableList<CheckInEntity> = mutableListOf()
@@ -41,16 +41,16 @@ class SchedulesEntity(
     fun getMeetingTime(): String? = meetingTime
     fun getMeetingTitle(): String? = meetingTitle
     fun getMeetingPlace(): String? = meetingPlace
-    fun getLatitude(): Double? = latitude
-    fun getLongitude(): Double? = longitude
+    fun getLat(): Double? = lat
+    fun getLng(): Double? = lng
     fun getCheckins(): List<CheckInEntity> = checkins
 
-    fun updateSchedule(meetingTime: String?, meetingTitle: String?, meetingPlace: String?, latitude: Double?, longitude: Double?) {
+    fun updateSchedule(meetingTime: String?, meetingTitle: String?, meetingPlace: String?, lat: Double?, lng: Double?) {
         this.meetingTime = meetingTime
         this.meetingTitle = meetingTitle
         this.meetingPlace = meetingPlace
-        this.latitude = latitude
-        this.longitude = longitude
+        this.lat = lat
+        this.lng = lng
     }
     // Builder pattern implementation in Kotlin
     companion object {
@@ -64,8 +64,8 @@ class SchedulesEntity(
         private var meetingTime: String? = null
         private var meetingTitle: String? = null
         private var meetingPlace: String? = null
-        private var latitude: Double? = null
-        private var longitude: Double? = null
+        private var lat: Double? = null
+        private var lng: Double? = null
         private var checkins: MutableList<CheckInEntity> = mutableListOf()
 
         fun id(id: Long?) = apply { this.id = id }
@@ -73,8 +73,8 @@ class SchedulesEntity(
         fun meetingTime(meetingTime: String?) = apply { this.meetingTime = meetingTime }
         fun meetingTitle(meetingTitle: String?) = apply { this.meetingTitle = meetingTitle }
         fun meetingPlace(meetingPlace: String?) = apply { this.meetingPlace = meetingPlace }
-        fun latitude(latitude: Double?) = apply { this.latitude = latitude }
-        fun longitude(longitude: Double?) = apply { this.longitude = longitude }
+        fun lat(lat: Double?) = apply { this.lat = lat }
+        fun lng(lng: Double?) = apply { this.lng = lng }
         fun checkins(checkins: List<CheckInEntity>) = apply { this.checkins.addAll(checkins) }
 
         fun build() = SchedulesEntity(
@@ -83,8 +83,8 @@ class SchedulesEntity(
             meetingTime = meetingTime,
             meetingTitle = meetingTitle,
             meetingPlace = meetingPlace,
-            latitude = latitude,
-            longitude = longitude,
+            lat = lat,
+            lng = lng,
             checkins = checkins
         )
     }

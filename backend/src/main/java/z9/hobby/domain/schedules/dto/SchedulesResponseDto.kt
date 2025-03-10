@@ -8,8 +8,8 @@ class SchedulesResponseDto {
         val meetingTime: String? = null, // 모임 시간
         val meetingTitle: String? = null, // 모임 제목
         val meetingPlace: String? = null, // 모임 장소
-        val latitude: Double? = null, // 모임 위치 경도, 위도
-        val longitude: Double? = null
+        val lat: Double? = null, // 모임 위치 경도, 위도
+        val lng: Double? = null
     ) {
         companion object {
             @JvmStatic
@@ -19,8 +19,8 @@ class SchedulesResponseDto {
                     meetingTime = schedulesEntity.getMeetingTime(),
                     meetingTitle = schedulesEntity.getMeetingTitle(),
                     meetingPlace = schedulesEntity.getMeetingPlace(),
-                    latitude = schedulesEntity.getLatitude(),
-                    longitude = schedulesEntity.getLongitude()
+                    lat = schedulesEntity.getLat(),
+                    lng = schedulesEntity.getLng()
                 )
             }
         }
