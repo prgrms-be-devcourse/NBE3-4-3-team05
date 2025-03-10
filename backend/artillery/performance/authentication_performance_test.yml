@@ -17,7 +17,10 @@ config:
         - "newPassword"
         - "newNickname"
   phases:
-    - duration: 30
+    - duration: 10
+      arrivalRate: 1
+      name: warm-up
+    - duration: 20
       arrivalRate: 1
       name: Sustained
 

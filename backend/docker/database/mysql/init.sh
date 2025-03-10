@@ -89,7 +89,8 @@ CREATE TABLE \`class_user_entity\` (
   \`class_id\` bigint NOT NULL,
   PRIMARY KEY (\`cu_id\`),
   KEY \`idx_class_id\` (\`class_id\`),
-  CONSTRAINT \`fk_class_user_entity_class_id\` FOREIGN KEY (\`class_id\`) REFERENCES \`class_entity\` (\`class_id\`)
+  CONSTRAINT \`fk_class_user_entity_class_id\` FOREIGN KEY (\`class_id\`) REFERENCES \`class_entity\` (\`class_id\`),
+  INDEX \`idx_user_id\` (\`user_id\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Schedule Table
