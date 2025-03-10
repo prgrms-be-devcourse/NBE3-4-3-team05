@@ -26,7 +26,11 @@ class SchedulesService(
     //생성
     @Transactional
     fun create(requestData: CreateRequest, userId: Long): SchedulesResponseDto.ResponseData {
-        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank() || requestData.meetingPlace.isNullOrBlank()) {
+        if (requestData.meetingTime.isNullOrBlank() ||
+            requestData.meetingTitle.isNullOrBlank() ||
+            requestData.meetingPlace.isNullOrBlank() ||
+            requestData.lat == null ||
+            requestData.lng == null) {
             throw CustomException(ErrorCode.SCHEDULE_CREATE_FAILED)
         }
 
@@ -57,8 +61,8 @@ class SchedulesService(
                 .meetingTime(requestData.meetingTime)
                 .meetingTitle(requestData.meetingTitle)
                 .meetingPlace(requestData.meetingPlace)
-                .latitude(requestData.latitude)
-                .longitude(requestData.longitude)
+                .lat(requestData.lat)
+                .lng(requestData.lng)
                 .build()
 
             // DB에 저장
@@ -83,7 +87,11 @@ class SchedulesService(
         requestData: UpdateRequest,
         userId: Long?
     ): SchedulesResponseDto.ResponseData {
-        if (requestData.meetingTime.isNullOrBlank() || requestData.meetingTitle.isNullOrBlank() || requestData.meetingPlace.isNullOrBlank()) {
+        if (requestData.meetingTime.isNullOrBlank() ||
+            requestData.meetingTitle.isNullOrBlank() ||
+            requestData.meetingPlace.isNullOrBlank() ||
+            requestData.lat == null ||
+            requestData.lng == null) {
             throw CustomException(ErrorCode.SCHEDULE_UPDATE_FAILED)
         }
 
@@ -109,7 +117,7 @@ class SchedulesService(
             }
 
             // 일정 정보 업데이트
-            schedule.updateSchedule(requestData.meetingTime, requestData.meetingTitle, requestData.meetingPlace, requestData.latitude, requestData.longitude)
+            schedule.updateSchedule(requestData.meetingTime, requestData.meetingTitle, requestData.meetingPlace, requestData.lat, requestData.lng)
             // DB에 저장
             val savedSchedule = schedulesRepository.save(schedule)
 
