@@ -159,6 +159,9 @@ public class BaseInitData {
                         .classes(classEntity)
                         .meetingTime(meetingTime)
                         .meetingTitle("모임 " + classEntity.getId() + "의 " + i + "번째 일정")
+                        .meetingPlace("서울특별시 강남구 테헤란로 " + (i * 10) + "길") // 기본 장소 추가
+                        .lat(37.5665 + (i * 0.001)) // 서울 중심부 좌표에 약간의 변화를 줌
+                        .lng(126.9780 + (i * 0.001)) // 서울 중심부 좌표에 약간의 변화를 줌
                         .build();
                 schedulesRepository.save(schedule);
             }

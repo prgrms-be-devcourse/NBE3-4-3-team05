@@ -8,6 +8,7 @@ const CustomList = forwardRef(
             data2,
             data3,
             data4,
+            data5,
             check,
             title = "",
             description = "",
@@ -26,6 +27,7 @@ const CustomList = forwardRef(
                 <div className="item-info">
                     <h4 className="name">{data2}</h4>
                     {description && <p className="description">{data3}</p>}
+                    {data5 && <p className="place">장소: {data5}</p>}
                     {sub && <span className="date">{data4}</span>}
                 </div>
                 <div className="buttons">

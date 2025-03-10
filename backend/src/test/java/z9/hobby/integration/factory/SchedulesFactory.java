@@ -34,6 +34,9 @@ public class SchedulesFactory {
                     .classes(classEntity)
                     .meetingTime(formattedTime)
                     .meetingTitle(meetingTitle)
+                    .meetingPlace(String.format("테스트 장소 %d", index))
+                    .lat(37.5665 + (index * 0.001))  // 서울 중심부 위도
+                    .lng(126.9780 + (index * 0.001))  // 서울 중심부 경도
                     .build();
             SchedulesEntity saveSchedule = schedulesRepository.save(newSchedule);
             saveScheduleList.add(saveSchedule);

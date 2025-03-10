@@ -149,13 +149,27 @@ const Class = () => {
       return;
     }
 
+    // 주소 검증
+    if (!addressInfo.address) {
+      Alert("모임 장소를 입력해주세요.");
+      return;
+    }
+
+    // 좌표 검증
+    if (!addressInfo.lat || !addressInfo.lng ||
+        isNaN(parseFloat(addressInfo.lat)) ||
+        isNaN(parseFloat(addressInfo.lng))) {
+      Alert("유효한 위치 정보가 필요합니다. 주소를 다시 검색해주세요.");
+      return;
+    }
+
     const body = {
       classId: id,
       meetingTime: meetingTime,
       meetingTitle: meetingTitle,
-      address: `${addressInfo.address} ${addressInfo.detailAddress}`,
-      lat: addressInfo.lat,
-      lng: addressInfo.lng
+      meetingPlace: `${addressInfo.address} ${addressInfo.detailAddress}`,
+      lat: parseFloat(addressInfo.lat),  // 명시적 변환
+      lng: parseFloat(addressInfo.lng)   // 명시적 변환
     };
     try {
       const response = await ScheduleService.postSchedulesLists(body);
@@ -252,9 +266,11 @@ const Class = () => {
           <h3>일정 목록</h3>
           {schedules.length > 0 && schedules.map((schedule) => (
               <CustomList
+                  key={schedule?.scheduleId}
                   data1={schedule?.scheduleId}
                   data2={schedule?.meetingTitle}
                   data3={schedule?.meetingTime}
+                  data5={schedule?.meetingPlace}
                   description="true"
                   button1 ="참석"
                   onClick1={()=>debouncedHandleCheckIn(schedule?.scheduleId,true)}

@@ -23,7 +23,10 @@ class SchedulesController(
     private val schedulesService: SchedulesService
 ) {
     @PostMapping("/classes")
-    @Operation(summary = "모임 일정 생성", description = "새로운 모임 일정을 생성합니다. 모임장만 생성 가능합니다.")
+    @Operation(
+        summary = "모임 일정 생성",
+        description = "새로운 모임 일정을 생성합니다. 모임장만 생성 가능합니다. 필요시 모임 장소와 위도/경도 정보를 함께 저장합니다."
+    )
     fun create(
         @RequestBody @Valid requestData: CreateRequest,
         principal: Principal
@@ -34,7 +37,10 @@ class SchedulesController(
     }
 
     @PutMapping("/{scheduleId}/classes/{classId}")
-    @Operation(summary = "모임 일정 수정", description = "모임의 일정을 수정합니다.")
+    @Operation(
+        summary = "모임 일정 수정",
+        description = "모임의 일정을 수정합니다. 모임 장소와 위도/경도 정보도 수정 가능합니다."
+    )
     fun modify(
         @Parameter(description = "일정 ID", required = true) @PathVariable scheduleId: Long,
         @Parameter(description = "모임 ID", required = true) @PathVariable classId: Long,

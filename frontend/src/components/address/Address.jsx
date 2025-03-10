@@ -1,13 +1,20 @@
 import './Address.css';
 import React, { useEffect, useState } from 'react';
 
-const Address = ({ onAddressSelect }) => {
+const Address = ({ onAddressSelect, initialAddress, initialLat, initialLng }) => {
     const [postcode, setPostcode] = useState("");
     const [address, setAddress] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
     const [extraAddress, setExtraAddress] = useState("");
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
+
+    // 초기값이 변경될 때 상태 업데이트
+    useEffect(() => {
+        if (initialAddress) setAddress(initialAddress);
+        if (initialLat) setLat(initialLat);
+        if (initialLng) setLng(initialLng);
+    }, [initialAddress, initialLat, initialLng]);
 
     useEffect(() => {
         const script = document.createElement('script');
