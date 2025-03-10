@@ -63,7 +63,7 @@ const getUserClassInfo = async () => {
 	}
 };
 
-// 회원 모임 리스트 조회
+// 회원 스케줄 리스트 조회
 const getUserScheduleInfo = async () => {
 	const response = await axiosInstance.get(
 		`${Project.API_URL}/users/schedules`,
