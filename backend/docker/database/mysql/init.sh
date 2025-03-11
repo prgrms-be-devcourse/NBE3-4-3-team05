@@ -24,14 +24,15 @@ CREATE TABLE \`users\` (
   PRIMARY KEY (\`user_id\`),
   UNIQUE KEY \`unique_nickname\` (\`nickname\`),
   UNIQUE KEY \`unique_login_id\` (\`login_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 #Favorite Table
 CREATE TABLE \`favorites\` (
   \`favorite_id\` bigint NOT NULL AUTO_INCREMENT,
   \`favorite_name\` varchar(255) NOT NULL,
-  PRIMARY KEY (\`favorite_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (\`favorite_id\`),
+  INDEX \`idx_favorite_name\` (\`favorite_name\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # UserOauth TABLE
 CREATE TABLE \`users_oauth\` (
@@ -57,7 +58,7 @@ CREATE TABLE \`users_favorite\` (
   KEY \`idx_user_id\` (\`user_id\`),
   CONSTRAINT \`fk_users_favorite_favorite_id\` FOREIGN KEY (\`favorite_id\`) REFERENCES \`favorites\` (\`favorite_id\`),
   CONSTRAINT \`fk_users_favorite_user_id\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\` (\`user_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Class Entity
 CREATE TABLE IF NOT EXISTS \`class_entity\` (
@@ -69,7 +70,7 @@ CREATE TABLE IF NOT EXISTS \`class_entity\` (
   \`master_id\` bigint NOT NULL,
   \`name\` varchar(255) NOT NULL,
   PRIMARY KEY (\`class_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Class Black List 생성
 CREATE TABLE IF NOT EXISTS \`class_black_list_entity\` (
@@ -88,8 +89,9 @@ CREATE TABLE \`class_user_entity\` (
   \`class_id\` bigint NOT NULL,
   PRIMARY KEY (\`cu_id\`),
   KEY \`idx_class_id\` (\`class_id\`),
-  CONSTRAINT \`fk_class_user_entity_class_id\` FOREIGN KEY (\`class_id\`) REFERENCES \`class_entity\` (\`class_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT \`fk_class_user_entity_class_id\` FOREIGN KEY (\`class_id\`) REFERENCES \`class_entity\` (\`class_id\`),
+  INDEX \`idx_user_id\` (\`user_id\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Schedule Table
 CREATE TABLE \`schedules\` (
@@ -105,7 +107,7 @@ CREATE TABLE \`schedules\` (
   PRIMARY KEY (\`schedules_id\`),
   CONSTRAINT \`FK_schedules_class_id\` FOREIGN KEY (\`class_id\`) REFERENCES \`class_entity\` (\`class_id\`),
   KEY \`IDX_schedules_class_id\` (\`class_id\`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Schedule Checkin Table
 CREATE TABLE \`schedules_checkin\` (
@@ -117,7 +119,8 @@ CREATE TABLE \`schedules_checkin\` (
   \`schedules_id\` bigint DEFAULT NULL,
   PRIMARY KEY (\`sc_id\`),
   CONSTRAINT \`FK_schedules_checkin_schedules_id\` FOREIGN KEY (\`schedules_id\`) REFERENCES \`schedules\` (\`schedules_id\`),
-  KEY \`IDX_schedules_checkin_schedules_id\` (\`schedules_id\`)
+  KEY \`IDX_schedules_checkin_schedules_id\` (\`schedules_id\`),
+  INDEX \`idx_user_checkin_user_id_check_in\` (\`user_id\`,\`check_in\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 # Exporter 사용자 생성
