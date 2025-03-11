@@ -166,7 +166,6 @@ const ScheduleDetail = () => {
 
         // 참고항목 분리 (괄호로 시작하는 부분)
         let mainPart = fullAddress;
-
         if (fullAddress.includes('(')) {
             const parts = fullAddress.split(' (');
             mainPart = parts[0].trim();
@@ -175,26 +174,56 @@ const ScheduleDetail = () => {
             }
         }
 
-        // 메인 주소에서 상세주소 분리 시도
-        const addressParts = mainPart.split(' ');
+        // 주소 패턴 분석
+        const words = mainPart.split(' ');
 
-        // 주소가 최소 3개 단어 이상일 때만 마지막 부분을 상세주소로 간주
-        if (addressParts.length >= 3) {
-            // 마지막 부분이 상세주소로 보이는 패턴인지 확인
-            const lastPart = addressParts[addressParts.length - 1];
+        // 1. 도로명 주소 패턴 찾기 ("로", "길" 다음에 오는 숫자)
+        let mainAddressEndIndex = -1;
 
-            // 상세주소 패턴: 숫자가 포함되거나, 특정 단어로 끝나는 경우
-            if (/\d/.test(lastPart) ||
-                /[0-9a-zA-Z가-힣]+(동|호|번지|길|로|층)/.test(lastPart) ||
-                /[A-Za-z]/.test(lastPart)) { // 영문이 포함된 경우 (카페 이름 등)
-
-                result.detailAddress = lastPart;
-                result.mainAddress = addressParts.slice(0, -1).join(' ');
-            } else {
-                result.mainAddress = mainPart;
+        for (let i = 0; i < words.length; i++) {
+            if (i > 0 &&
+                (words[i-1].endsWith('로') || words[i-1].endsWith('길')) &&
+                /^\d+$/.test(words[i])) {
+                mainAddressEndIndex = i;
+                break;
             }
+        }
+
+        // 2. 지하철역이나 지하 번호 패턴 찾기
+        if (mainAddressEndIndex === -1) {
+            for (let i = 0; i < words.length; i++) {
+                // 숫자 뒤에 "번"이 있거나, "지하" 뒤에 숫자가 있는 패턴 찾기
+                if (/^\d+$/.test(words[i]) ||
+                    (i > 0 && words[i-1] === '지하' && /^\d+$/.test(words[i])) ||
+                    words[i].includes('지하')) {
+                    mainAddressEndIndex = i;
+                }
+            }
+        }
+
+        // 도로명 주소 패턴을 찾았다면
+        if (mainAddressEndIndex >= 0) {
+            result.mainAddress = words.slice(0, mainAddressEndIndex + 1).join(' ');
+            result.detailAddress = words.slice(mainAddressEndIndex + 1).join(' ');
         } else {
-            result.mainAddress = mainPart;
+            // 도로명 주소 패턴을 찾지 못했을 경우 대체 로직
+            // 가능하면 메인 주소의 마지막 부분이 숫자인지 확인
+            let lastNumberIndex = -1;
+            for (let i = 0; i < words.length; i++) {
+                if (/\d/.test(words[i])) {
+                    lastNumberIndex = i;
+                }
+            }
+
+            if (lastNumberIndex >= 0) {
+                result.mainAddress = words.slice(0, lastNumberIndex + 1).join(' ');
+                result.detailAddress = words.slice(lastNumberIndex + 1).join(' ');
+            } else {
+                // 숫자를 찾지 못한 경우, 기본 분리 (60% 지점)
+                const splitPoint = Math.floor(words.length * 0.6);
+                result.mainAddress = words.slice(0, splitPoint).join(' ');
+                result.detailAddress = words.slice(splitPoint).join(' ');
+            }
         }
 
         return result;
@@ -243,8 +272,13 @@ const ScheduleDetail = () => {
             // 기존 주소에서 각 부분 분리
             const addressParts = extractAddressParts(schedule.meetingPlace);
 
-            // 새 주소 구성: 메인 주소 + 새 상세주소 + 참고항목
-            meetingPlace = `${addressParts.mainAddress} ${detailAddressInput}`;
+            // 새 주소 구성: 메인 주소 + 새 상세주소(입력값으로 완전 교체) + 참고항목
+            meetingPlace = addressParts.mainAddress;
+
+            // 새 상세주소 추가 (기존 상세주소를 완전히 대체)
+            if (detailAddressInput) {
+                meetingPlace += ` ${detailAddressInput}`;
+            }
 
             // 참고항목 추가
             if (addressParts.extraAddress) {
@@ -374,7 +408,7 @@ const ScheduleDetail = () => {
                             <label>일정 시간:</label>
                             {initialValuesSet && (
                                 <DateTimeInput
-                                    key={`date-input-${schedule.meetingTime}`} // 키 추가로 컴포넌트 강제 리렌더링
+                                    key={`date-input-${schedule.meetingTime || Date.now()}`} // 고유 키 생성
                                     onMeetingTimeChange={handleMeetingTimeChange}
                                     initialDateTime={schedule.meetingTime}
                                 />

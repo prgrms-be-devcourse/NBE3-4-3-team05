@@ -47,7 +47,23 @@ const Class = () => {
   const openModal = () => setIsModalOpen(true);
   const schedulesModal = () => setIsSchedulesModal(true);
   const closeModal = () => setIsModalOpen(false);
-  const closeSchedulesModal = () => setIsSchedulesModal(false);
+  const closeSchedulesModal = () => {
+    // 작성 중인 내용이 있는지 확인
+    if (meetingTitle || meetingTime || addressInfo.address) {
+        setIsSchedulesModal(false);
+        // 모달 내용 초기화
+        setMeetingTitle("");
+        setMeetingTime("");
+        setAddressInfo({
+          address: '',
+          detailAddress: '',
+          lat: '',
+          lng: ''
+        });
+    } else {
+      setIsSchedulesModal(false);
+    }
+  };
 
   const modifyResult = () => {
     closeModal();
