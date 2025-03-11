@@ -49,6 +49,9 @@ public abstract class SchedulesBaseTest extends SpringBootTestSupporter {
                 .classes(classEntity)
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle(SchedulesBaseTest.TEST_MEETING_TITLE)
+                .meetingPlace("테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build());
     }
 
@@ -69,6 +72,9 @@ public abstract class SchedulesBaseTest extends SpringBootTestSupporter {
                 .classId(classId)
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle(TEST_MEETING_TITLE)
+                .meetingPlace("테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
     }
 }

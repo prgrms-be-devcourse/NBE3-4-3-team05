@@ -30,3 +30,32 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+/*지도 관련 CSS 추가*/
+.map-preview {
+ margin: 15px 0;
+ width: 100%;
+}
+
+.map-preview h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 모달 스크롤 가능하도록 설정 */
+.modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* 저장 버튼 잘 보이게 하기 */
+.modal-form .custom-button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

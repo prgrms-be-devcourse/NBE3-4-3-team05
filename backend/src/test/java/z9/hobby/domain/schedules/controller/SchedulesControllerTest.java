@@ -85,6 +85,9 @@ class SchedulesControllerTest extends SchedulesBaseTest {
                 .classId(classEntity.getId())
                 .meetingTime("2025-02-05") // 잘못된 형식
                 .meetingTitle("테") // 2글자 미만
+                .meetingPlace("테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when
@@ -195,6 +198,9 @@ class SchedulesControllerTest extends SchedulesBaseTest {
         SchedulesRequestDto.UpdateRequest updateRequest = SchedulesRequestDto.UpdateRequest.builder()
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle("수정된 테스트 일정")
+                .meetingPlace("수정된 테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when
@@ -221,6 +227,9 @@ class SchedulesControllerTest extends SchedulesBaseTest {
         SchedulesRequestDto.UpdateRequest updateRequest = SchedulesRequestDto.UpdateRequest.builder()
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle("수정된 테스트 일정")
+                .meetingPlace("수정된 테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when

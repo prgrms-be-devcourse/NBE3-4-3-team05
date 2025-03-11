@@ -74,6 +74,9 @@ class SchedulesServiceTest extends SchedulesBaseTest {
                 .classId(999L)
                 .meetingTime(futureDate)  // 현재 날짜 + 7일
                 .meetingTitle("테스트 일정")
+                .meetingPlace("테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when & then
@@ -164,6 +167,9 @@ class SchedulesServiceTest extends SchedulesBaseTest {
         SchedulesRequestDto.UpdateRequest updateRequest = SchedulesRequestDto.UpdateRequest.builder()
                 .meetingTime(newMeetingTime)
                 .meetingTitle("수정된 테스트 일정")
+                .meetingPlace("수정된 테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when
@@ -189,6 +195,9 @@ class SchedulesServiceTest extends SchedulesBaseTest {
         SchedulesRequestDto.UpdateRequest updateRequest = SchedulesRequestDto.UpdateRequest.builder()
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle("수정된 테스트 일정")
+                .meetingPlace("수정된 테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when & then
@@ -208,6 +217,9 @@ class SchedulesServiceTest extends SchedulesBaseTest {
         SchedulesRequestDto.UpdateRequest updateRequest = SchedulesRequestDto.UpdateRequest.builder()
                 .meetingTime(getTestMeetingTime())
                 .meetingTitle("수정된 테스트 일정")
+                .meetingPlace("수정된 테스트 장소")
+                .lat(37.5665)
+                .lng(126.9780)
                 .build();
 
         // when & then

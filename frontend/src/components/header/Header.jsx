@@ -27,10 +27,15 @@ const Header = () => {
     navigate(isLogin?'/mypage':"/join");
   }
 
+  const handleKakaoMap = () => {
+    navigate("/kakaomap");
+  }
+
 	return (
     <header id="header">
       <Logo />
       <nav className='nav-wrap'>
+        <button onClick={handleKakaoMap}>지도</button>
         <button onClick={handleLoginOrLogout}>{!isLogin ? "로그인" : "로그아웃"}</button>
         <button onClick={handleSignupOrMypage}>{!isLogin ? "회원가입" : "마이페이지"}</button>
       </nav>

@@ -38,9 +38,9 @@ const Mypage = () => {
       try {
         const response = await UserService.getUserScheduleInfo();
         if (response.data?.isSuccess) {
-          console.log("회원 스케줄 리스트 조회 성공", response.data.data);
-          setUserScheduleInfo(response.data.data.schedule);
-        }
+			console.log("회원 스케줄 리스트 조회 성공", response.data.data);
+			setUserScheduleInfo(response.data.data.schedule);
+		}
       } catch (error) {
         console.error("회원 스케줄 리스트 조회 실패", error);
       }
@@ -102,7 +102,7 @@ const Mypage = () => {
           <div key={classItem.classId} className="class-item">
             <h3>{classItem.name}</h3>
             <p>{classItem.description}</p>
-            <p><strong>관심사:</strong> {classItem.favorite}</p>
+            <p><strong>관심사 :</strong> {classItem.favorite}</p>
             <button
               onClick={() => handleClassClick(classItem.classId)}
             >
@@ -118,7 +118,8 @@ const Mypage = () => {
         {userScheduleInfo.map((scheduleItem) => (
           <div key={scheduleItem.classId} className="schedule-item">
             <h3>{scheduleItem.classTitle}</h3>
-            <p><strong>모임 시간:</strong> {scheduleItem.meetingTime}</p>
+            <p><strong>모임 시간 :</strong> {scheduleItem.meetingTime}</p>
+			<p><strong>모임 장소 :</strong> {scheduleItem.meetingPlace || '위치 정보 없음'}</p>
             <button
               onClick={() => handleScheduleClick(scheduleItem.classId)}
             >

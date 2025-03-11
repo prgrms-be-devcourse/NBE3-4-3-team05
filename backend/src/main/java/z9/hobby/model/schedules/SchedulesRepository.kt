@@ -24,4 +24,161 @@ interface SchedulesRepository : JpaRepository<SchedulesEntity, Long> {
                 "ORDER BY s.meetingTime DESC")
     )
     fun findUserSchedulesInfoByUserId(@Param("userId") userId: Long): List<SchedulesEntity>
+
+    // ALL + ALL
+    @Query(
+        ("SELECT s FROM SchedulesEntity s " +
+                "WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat " +
+                "AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng)")
+    )
+    fun findByLatLng(
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double
+    ): List<SchedulesEntity>
+
+    // ALL + TODAY
+    @Query(
+        """
+        SELECT s FROM SchedulesEntity s
+        WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat
+        AND s.lng BETWEEN :bottomLeftLng AND :topRightLng
+        AND s.meetingTime = :todayStr        
+    """
+    )
+    fun findBySchedulesForToday(
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String
+    ): List<SchedulesEntity>
+
+    // ALL + WEEK
+    @Query(
+        """
+    SELECT s FROM SchedulesEntity s
+    WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat
+    AND s.lng BETWEEN :bottomLeftLng AND :topRightLng
+    AND s.meetingTime >= :todayStr
+    AND s.meetingTime <= :plusWeekStr   
+    """
+    )
+    fun findBySchedulesForWeek(
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String,
+        @Param("plusWeekStr") plusWeekStr: String
+    ): List<SchedulesEntity>
+
+    // ALL + MONTH
+    @Query(
+        """
+    SELECT s FROM SchedulesEntity s
+    WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat
+    AND s.lng BETWEEN :bottomLeftLng AND :topRightLng
+    AND s.meetingTime >= :todayStr
+    AND s.meetingTime <= :plusWeekStr   
+    """
+    )
+    fun findBySchedulesForMonth(
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String,
+        @Param("plusWeekStr") plusWeekStr: String
+    ): List<SchedulesEntity>
+
+    // FAVORITE + ALL
+    @Query(
+        "SELECT s FROM SchedulesEntity s JOIN FETCH s.classes c " +
+                "WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat " +
+                "AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng) " +
+                "AND c.favorite IN (" +
+                "    SELECT f.name FROM FavoriteEntity f, UserFavorite uf " +
+                "    WHERE uf.favorite.id = f.id AND uf.user.id = :userId" +
+                ")"
+    )
+    fun findFavoriteSchedulesByUserId(
+        @Param("userId") userId: Long,
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double
+    ): List<SchedulesEntity>
+
+    // FAVORITE + TODAY
+    @Query(
+        """
+        SELECT DISTINCT s FROM SchedulesEntity s 
+        JOIN FETCH s.classes c 
+        WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat 
+        AND s.lng BETWEEN :bottomLeftLng AND :topRightLng 
+        AND c.favorite IN (
+        SELECT f.name FROM FavoriteEntity f 
+        JOIN UserFavorite uf ON uf.favorite.id = f.id 
+        WHERE uf.user.id = :userId) 
+        AND s.meetingTime = :todayStr        
+        """
+    )
+    fun findFavoriteSchedulesByUserIdForToday(
+        @Param("userId") userId: Long,
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String
+    ): List<SchedulesEntity>
+
+    // FAVORITE + WEEK
+    @Query(
+        """
+        SELECT s FROM SchedulesEntity s 
+        JOIN FETCH s.classes c 
+        WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat 
+        AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng) 
+        AND c.favorite IN (
+        SELECT f.name FROM FavoriteEntity f, UserFavorite uf 
+        WHERE uf.favorite.id = f.id AND uf.user.id = :userId) 
+        AND s.meetingTime >= :todayStr
+        AND s.meetingTime <= :plusWeekStr        
+        """
+    )
+    fun findFavoriteSchedulesByUserIdForWeek(
+        @Param("userId") userId: Long,
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String,
+        @Param("plusWeekStr") plusWeekStr: String
+    ): List<SchedulesEntity>
+
+    // FAVORITE + MONTH
+    @Query(
+        """
+        SELECT s FROM SchedulesEntity s 
+        JOIN FETCH s.classes c 
+        WHERE s.lat BETWEEN :bottomLeftLat AND :topRightLat 
+        AND s.lng BETWEEN LEAST(:bottomLeftLng, :topRightLng) AND GREATEST(:bottomLeftLng, :topRightLng) 
+        AND c.favorite IN (
+        SELECT f.name FROM FavoriteEntity f, UserFavorite uf 
+        WHERE uf.favorite.id = f.id AND uf.user.id = :userId) 
+        AND s.meetingTime >= :todayStr
+        AND s.meetingTime <= :plusWeekStr          
+        """
+    )
+    fun findFavoriteSchedulesByUserIdForMonth(
+        @Param("userId") userId: Long,
+        @Param("bottomLeftLat") bottomLeftLat: Double,
+        @Param("bottomLeftLng") bottomLeftLng: Double,
+        @Param("topRightLat") topRightLat: Double,
+        @Param("topRightLng") topRightLng: Double,
+        @Param("todayStr") todayStr: String,
+        @Param("plusWeekStr") plusWeekStr: String
+    ): List<SchedulesEntity>
 }

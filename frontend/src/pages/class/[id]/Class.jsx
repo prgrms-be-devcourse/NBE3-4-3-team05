@@ -13,6 +13,7 @@ import { ScheduleService } from "../../../services/SheduleService";
 import {CheckInService} from "../../../services/CheckInService";
 
 import "./Class.css";
+import KakaoMap from "../../kakaoMap/KakaoMap";
 
 
 const Class = () => {
@@ -27,8 +28,6 @@ const Class = () => {
   const [isSchdulesModal, setIsSchedulesModal] = useState(false);
   const router = useNavigate();
   const [schedules, setSchedules] = useState([]);
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
-  const [isDetailModal, setIsDetailModal] = useState(false);
   const cacheRef = useRef(responseCache);
   const [addressInfo, setAddressInfo] = useState({
     address: '',
@@ -49,7 +48,6 @@ const Class = () => {
   const schedulesModal = () => setIsSchedulesModal(true);
   const closeModal = () => setIsModalOpen(false);
   const closeSchedulesModal = () => setIsSchedulesModal(false);
-  const closeSchedulesDetailModal = () => setIsDetailModal(false);
 
   const modifyResult = () => {
     closeModal();
@@ -149,13 +147,27 @@ const Class = () => {
       return;
     }
 
+    // 주소 검증
+    if (!addressInfo.address) {
+      Alert("모임 장소를 입력해주세요.");
+      return;
+    }
+
+    // 좌표 검증
+    if (!addressInfo.lat || !addressInfo.lng ||
+        isNaN(parseFloat(addressInfo.lat)) ||
+        isNaN(parseFloat(addressInfo.lng))) {
+      Alert("유효한 위치 정보가 필요합니다. 주소를 다시 검색해주세요.");
+      return;
+    }
+
     const body = {
       classId: id,
       meetingTime: meetingTime,
       meetingTitle: meetingTitle,
-      address: `${addressInfo.address} ${addressInfo.detailAddress}`,
-      lat: addressInfo.lat,
-      lng: addressInfo.lng
+      meetingPlace: `${addressInfo.address} ${addressInfo.detailAddress}`,
+      lat: parseFloat(addressInfo.lat),  // 명시적 변환
+      lng: parseFloat(addressInfo.lng)   // 명시적 변환
     };
     try {
       const response = await ScheduleService.postSchedulesLists(body);
@@ -252,9 +264,11 @@ const Class = () => {
           <h3>일정 목록</h3>
           {schedules.length > 0 && schedules.map((schedule) => (
               <CustomList
+                  key={schedule?.scheduleId}
                   data1={schedule?.scheduleId}
                   data2={schedule?.meetingTitle}
                   data3={schedule?.meetingTime}
+                  data5={schedule?.meetingPlace}
                   description="true"
                   button1 ="참석"
                   onClick1={()=>debouncedHandleCheckIn(schedule?.scheduleId,true)}
@@ -303,20 +317,23 @@ const Class = () => {
             />
             <DateTimeInput onMeetingTimeChange={handleMeetingTimeChange} />
             <Address onAddressSelect={handleAddressSelect} />
+            {/* 주소 선택 후 지도 표시 - 고유 키 추가 */}
+            {addressInfo.lat && addressInfo.lng && (
+                <div className="map-preview">
+                  <h4>선택한 위치</h4>
+                  <KakaoMap
+                      key={`create-map-${addressInfo.lat}-${addressInfo.lng}`} // 같은 위치 여러번 랜더링할 때 발생하는 문제 예방
+                      lat={parseFloat(addressInfo.lat)}
+                      lng={parseFloat(addressInfo.lng)}
+                      place={`${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim()}
+                      height="180px"
+                  />
+                </div>
+            )}
             <button className="custom-button" onClick={handlerCreateSchedule}>
               생성하기
             </button>
           </div>
-        </Modal>
-
-        <Modal isOpen={isDetailModal} title="일정 상세 정보" onClose={closeSchedulesDetailModal}>
-          {selectedSchedule && (
-              <div className="schedule-detail">
-                <h4>일정 제목: {selectedSchedule.meetingTitle}</h4>
-                <p>일시: {selectedSchedule.meetingTime}</p>
-                {/* 추가적인 상세 정보가 있다면 여기에 표시 */}
-              </div>
-          )}
         </Modal>
       </div>
   );
