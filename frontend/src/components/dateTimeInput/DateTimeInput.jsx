@@ -1,17 +1,46 @@
 import React, { useState, useEffect } from "react";
 import "./DateTimeInput.css";
 
-function DateTimeInput({ onMeetingTimeChange }) {
+function DateTimeInput({ onMeetingTimeChange, initialDateTime, initialYear, initialMonth, initialDay }) {
   const today = new Date();
 
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
+  // 초기값 파싱 로직
+  const getInitialValues = () => {
+    // Props로 직접 년월일이 전달된 경우
+    if (initialYear && initialMonth && initialDay) {
+      return {
+        year: String(initialYear),
+        month: String(initialMonth),
+        day: String(initialDay)
+      };
+    }
+
+    // initialDateTime이 전달된 경우 (YYYY-MM-DD 형식)
+    if (initialDateTime) {
+      const parts = initialDateTime.split('-');
+      if (parts.length >= 3) {
+        return {
+          year: parts[0],
+          month: parts[1].startsWith('0') ? parts[1].substring(1) : parts[1],
+          day: parts[2].startsWith('0') ? parts[2].substring(1) : parts[2]
+        };
+      }
+    }
+
+    // 초기값이 없는 경우
+    return { year: "", month: "", day: "" };
+  };
+
+  // 초기값 설정
+  const initialValues = getInitialValues();
+  const [year, setYear] = useState(initialValues.year);
+  const [month, setMonth] = useState(initialValues.month);
+  const [day, setDay] = useState(initialValues.day);
 
   useEffect(() => {
     if (year && month && day) {
       const dateTime = new Date(year, month - 1, day);
-      // 형식을 'YYYY-MM-DD HH:mm:ss'로 변경하고 시간은 00:00:00으로 설정
+      // 형식을 'YYYY-MM-DD'로 변경
       const formattedDateTime = `${dateTime.getFullYear()}-${String(dateTime.getMonth() + 1).padStart(2, "0")}-${String(dateTime.getDate()).padStart(2, "0")}`;
 
       // 날짜 형식이 어떻게 전송되는지 확인

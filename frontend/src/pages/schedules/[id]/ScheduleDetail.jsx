@@ -14,6 +14,12 @@ const ScheduleDetail = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [meetingTitle, setMeetingTitle] = useState('');
     const [meetingTime, setMeetingTime] = useState('');
+    // 날짜 컴포넌트 상태 추가
+    const [dateComponents, setDateComponents] = useState({
+        year: '',
+        month: '',
+        day: ''
+    });
     const [addressInfo, setAddressInfo] = useState({
         address: '',
         detailAddress: '',
@@ -26,14 +32,43 @@ const ScheduleDetail = () => {
     const [addressSearchMode, setAddressSearchMode] = useState(true);
     const [initialValuesSet, setInitialValuesSet] = useState(false);
 
-    // 컴포넌트 마운트 시와 schedule 데이터 로드 시 초기값 설정
+    // 날짜 문자열을 분석하여 년, 월, 일 컴포넌트로 변환하는 함수
+    const parseDateString = (dateString) => {
+        if (!dateString) return { year: '', month: '', day: '' };
+
+        try {
+            // "2023-05-17" 형식 파싱
+            if (dateString.includes('-')) {
+                const dateParts = dateString.split('-');
+                if (dateParts.length >= 3) {
+                    return {
+                        year: parseInt(dateParts[0], 10),
+                        month: parseInt(dateParts[1], 10),
+                        day: parseInt(dateParts[2], 10)
+                    };
+                }
+            }
+
+            console.warn('Unsupported date format:', dateString);
+            return { year: '', month: '', day: '' };
+        } catch (error) {
+            console.error('Error parsing date string:', error);
+            return { year: '', month: '', day: '' };
+        }
+    };
+
+    // 컴포넌트 마운트 시와 schedule 데이터 로드 시 초기값 설정을 수정
     useEffect(() => {
         if (schedule) {
             setMeetingTitle(schedule.meetingTitle || '');
 
-            // 명시적으로 schedule.meetingTime을 설정
+            // 명시적으로 schedule.meetingTime을 설정하고 날짜 구성요소 추출
             if (schedule.meetingTime) {
                 setMeetingTime(schedule.meetingTime);
+
+                // 날짜 구성요소 분석
+                const parsed = parseDateString(schedule.meetingTime);
+                setDateComponents(prevState => ({...prevState, ...parsed}));
             }
 
             setInitialValuesSet(true);
@@ -49,6 +84,12 @@ const ScheduleDetail = () => {
                 setSchedule(detailData);
                 setMeetingTitle(detailData.meetingTitle || '');
                 setMeetingTime(detailData.meetingTime || '');
+
+                // 날짜 구성요소 분석 추가
+                if (detailData.meetingTime) {
+                    const parsed = parseDateString(detailData.meetingTime);
+                    setDateComponents(prevState => ({...prevState, ...parsed}));
+                }
 
                 // 주소 정보 설정
                 const mainAddress = detailData.meetingPlace ? detailData.meetingPlace.split(' (')[0] : '';
@@ -79,6 +120,12 @@ const ScheduleDetail = () => {
 
     const handleMeetingTimeChange = useCallback((formattedDateTime) => {
         setMeetingTime(formattedDateTime);
+
+        // 변경된 날짜 문자열을 분석하여 컴포넌트 상태 업데이트
+        if (formattedDateTime) {
+            const parsed = parseDateString(formattedDateTime);
+            setDateComponents(prevState => ({...prevState, ...parsed}));
+        }
     }, []);
 
     // 주소 선택 핸들러
@@ -119,6 +166,13 @@ const ScheduleDetail = () => {
 
         setMeetingTitle(schedule.meetingTitle || '');
         setMeetingTime(schedule.meetingTime || '');
+
+        // 날짜 구성요소 리셋
+        if (schedule.meetingTime) {
+            const parsed = parseDateString(schedule.meetingTime);
+            setDateComponents(prevState => ({...prevState, ...parsed}));
+        }
+
         setDetailAddressInput('');
         setAddressSearchMode(true);
 
@@ -408,9 +462,12 @@ const ScheduleDetail = () => {
                             <label>일정 시간:</label>
                             {initialValuesSet && (
                                 <DateTimeInput
-                                    key={`date-input-${schedule.meetingTime || Date.now()}`} // 고유 키 생성
                                     onMeetingTimeChange={handleMeetingTimeChange}
                                     initialDateTime={schedule.meetingTime}
+                                    // 또는 파싱된 값을 직접 전달
+                                    initialYear={dateComponents.year}
+                                    initialMonth={dateComponents.month}
+                                    initialDay={dateComponents.day}
                                 />
                             )}
                         </div>
@@ -453,7 +510,7 @@ const ScheduleDetail = () => {
                                         type="text"
                                         value={detailAddressInput}
                                         onChange={(e) => setDetailAddressInput(e.target.value)}
-                                        placeholder="상세주소만 입력 (예: 101호, 이디아카페 등)"
+                                        placeholder="상세주소만 입력 (예: 101호, 이디야카페 등)"
                                     />
                                     <p className="help-text">기존 주소의 상세주소 부분만 변경됩니다.</p>
                                 </div>
@@ -488,7 +545,7 @@ const ScheduleDetail = () => {
                         {/* 지도 표시 */}
                         {(schedule.lat && schedule.lng) && (
                             <div className="map-container">
-                            <KakaoMap
+                                <KakaoMap
                                     key={`view-map-${scheduleId}-${schedule.lat}-${schedule.lng}`}
                                     lat={schedule.lat}
                                     lng={schedule.lng}
