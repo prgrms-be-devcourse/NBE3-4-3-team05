@@ -6,7 +6,6 @@ import { KakaoMapService } from 'src/services/KakaoMapService';
 import MarkerModal from "./MarkerModal";
 import SkeletonKakaoMap from "./SkeletonKakaoMap";
 import "./CustomMap.css";
-import { Project } from "src/constants/project";
 
 function CustomMap() {
 	const { location, errorMessage } = useUserLocation();
@@ -96,14 +95,14 @@ function CustomMap() {
       const currentLevel = mapRef.current.getLevel();
       currentLevelRef.current = currentLevel;
       setMapLevel(currentLevel);
-      
+
       const bounds = mapRef.current.getBounds();
       const northEast = bounds.getNorthEast();
       const southWest = bounds.getSouthWest();
-  
-      const bottomLeft = { 
-        lat: southWest.getLat(), 
-        lng: southWest.getLng() 
+
+      const bottomLeft = {
+        lat: southWest.getLat(),
+        lng: southWest.getLng()
       };
       const topRight = {
         lat: northEast.getLat(),
