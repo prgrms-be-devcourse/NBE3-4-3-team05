@@ -105,3 +105,41 @@
     border-radius: 8px;
     overflow: hidden;
 }
+
+.address-options {
+    display: flex;
+    margin-bottom: 16px;
+    gap: 10px; /* 버튼 사이 간격 추가 */
+}
+
+.address-options button {
+    padding: 8px 16px;
+    flex: 1;
+}
+
+.address-options button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.detail-address-only,
+.address-search-section {
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    background-color: #f9f9f9;
+}
+
+.current-address {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 8px;
+}
