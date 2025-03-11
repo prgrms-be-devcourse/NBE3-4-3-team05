@@ -22,6 +22,23 @@ const ScheduleDetail = () => {
         lat: '',
         lng: ''
     });
+    const [detailAddressInput, setDetailAddressInput] = useState('');
+    const [addressSearchMode, setAddressSearchMode] = useState(true);
+    const [initialValuesSet, setInitialValuesSet] = useState(false);
+
+    // 컴포넌트 마운트 시와 schedule 데이터 로드 시 초기값 설정
+    useEffect(() => {
+        if (schedule) {
+            setMeetingTitle(schedule.meetingTitle || '');
+
+            // 명시적으로 schedule.meetingTime을 설정
+            if (schedule.meetingTime) {
+                setMeetingTime(schedule.meetingTime);
+            }
+
+            setInitialValuesSet(true);
+        }
+    }, [schedule]);
 
     const fetchScheduleDetail = async () => {
         try {
@@ -30,8 +47,6 @@ const ScheduleDetail = () => {
 
             if (detailData) {
                 setSchedule(detailData);
-
-                // 기본값 설정
                 setMeetingTitle(detailData.meetingTitle || '');
                 setMeetingTime(detailData.meetingTime || '');
 
@@ -66,6 +81,7 @@ const ScheduleDetail = () => {
         setMeetingTime(formattedDateTime);
     }, []);
 
+    // 주소 선택 핸들러
     const handleAddressSelect = (data) => {
         setAddressInfo(data);
     };
@@ -88,24 +104,13 @@ const ScheduleDetail = () => {
     const hasChanges = () => {
         if (!schedule) return false;
 
-        const initialTitle = schedule.meetingTitle || '';
-        const initialTime = schedule.meetingTime || '';
-        const initialPlace = schedule.meetingPlace || '';
-        const initialLat = parseFloat(schedule.lat) || '';
-        const initialLng = parseFloat(schedule.lng) || '';
+        const titleChanged = meetingTitle !== (schedule.meetingTitle || '');
+        const timeChanged = meetingTime !== (schedule.meetingTime || '');
+        const addressChanged = addressInfo.address !== '' &&
+            addressInfo.address !== (schedule.meetingPlace ? schedule.meetingPlace.split(' (')[0] : '');
+        const detailChanged = detailAddressInput !== '';
 
-        // 현재 상태의 주소 정보 계산
-        const currentPlace = addressInfo.address ?
-            `${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim() :
-            '';
-        const currentLat = parseFloat(addressInfo.lat) || '';
-        const currentLng = parseFloat(addressInfo.lng) || '';
-
-        return meetingTitle !== initialTitle ||
-            meetingTime !== initialTime ||
-            currentPlace !== initialPlace ||
-            currentLat !== initialLat ||
-            currentLng !== initialLng;
+        return titleChanged || timeChanged || addressChanged || detailChanged;
     };
 
     // 폼을 원래 값으로 리셋
@@ -114,13 +119,15 @@ const ScheduleDetail = () => {
 
         setMeetingTitle(schedule.meetingTitle || '');
         setMeetingTime(schedule.meetingTime || '');
+        setDetailAddressInput('');
+        setAddressSearchMode(true);
 
         const mainAddress = schedule.meetingPlace ? schedule.meetingPlace.split(' (')[0] : '';
         const extraAddressPart = schedule.meetingPlace && schedule.meetingPlace.includes('(') ?
             `(${schedule.meetingPlace.split('(')[1]}` : '';
 
         setAddressInfo({
-            address: mainAddress,
+            address: '',
             detailAddress: '',
             extraAddress: extraAddressPart,
             postcode: '',
@@ -131,20 +138,66 @@ const ScheduleDetail = () => {
 
     // 편집 모드 토글 핸들러
     const toggleEditMode = () => {
-        if (isEditing && hasChanges()) {
-            // 변경 사항이 있는데 취소를 누른 경우
-            if (window.confirm('변경 사항이 있습니다. 취소하시겠습니까?')) {
-                resetFormToOriginal();
+        if (isEditing) {
+            if (hasChanges()) {
+                if (window.confirm('변경 사항이 있습니다. 취소하시겠습니까?')) {
+                    resetFormToOriginal();
+                    setIsEditing(false);
+                }
+            } else {
                 setIsEditing(false);
             }
         } else {
-            // 편집 모드로 들어가거나, 변경 사항 없이 취소하는 경우
-            setIsEditing(!isEditing);
-            if (!isEditing) {
-                // 편집 모드로 들어갈 때 현재 값으로 초기화
-                resetFormToOriginal();
+            setIsEditing(true);
+            resetFormToOriginal();
+        }
+    };
+
+    // 상세주소 처리 개선을 위한 함수 추가
+    const extractAddressParts = (fullAddress) => {
+        // 기본 결과 객체
+        const result = {
+            mainAddress: '',
+            detailAddress: '',
+            extraAddress: ''
+        };
+
+        if (!fullAddress) return result;
+
+        // 참고항목 분리 (괄호로 시작하는 부분)
+        let mainPart = fullAddress;
+
+        if (fullAddress.includes('(')) {
+            const parts = fullAddress.split(' (');
+            mainPart = parts[0].trim();
+            if (parts.length > 1) {
+                result.extraAddress = `(${parts[1]}`;
             }
         }
+
+        // 메인 주소에서 상세주소 분리 시도
+        const addressParts = mainPart.split(' ');
+
+        // 주소가 최소 3개 단어 이상일 때만 마지막 부분을 상세주소로 간주
+        if (addressParts.length >= 3) {
+            // 마지막 부분이 상세주소로 보이는 패턴인지 확인
+            const lastPart = addressParts[addressParts.length - 1];
+
+            // 상세주소 패턴: 숫자가 포함되거나, 특정 단어로 끝나는 경우
+            if (/\d/.test(lastPart) ||
+                /[0-9a-zA-Z가-힣]+(동|호|번지|길|로|층)/.test(lastPart) ||
+                /[A-Za-z]/.test(lastPart)) { // 영문이 포함된 경우 (카페 이름 등)
+
+                result.detailAddress = lastPart;
+                result.mainAddress = addressParts.slice(0, -1).join(' ');
+            } else {
+                result.mainAddress = mainPart;
+            }
+        } else {
+            result.mainAddress = mainPart;
+        }
+
+        return result;
     };
 
     const handleEditSubmit = async () => {
@@ -165,39 +218,69 @@ const ScheduleDetail = () => {
         }
 
         // 주소 정보 생성
-        const meetingPlace = addressInfo.address ?
-            `${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim() :
-            '';
+        let meetingPlace, finalLat, finalLng;
 
-        // 주소가 변경되지 않았다면 기존 위치 정보 사용
-        let finalLat, finalLng;
+        // 새 주소 검색 모드인지 확인
+        if (addressSearchMode && addressInfo.address) {
+            // 새로 검색한 주소 사용
+            meetingPlace = addressInfo.address;
 
-        if (addressInfo.address) {
-            // 새 주소를 입력한 경우 addressInfo의 lat/lng 사용
+            // Address 컴포넌트의 상세주소 사용
+            if (addressInfo.detailAddress) {
+                meetingPlace += ` ${addressInfo.detailAddress}`;
+            }
+
+            // 참고항목이 있으면 추가
+            if (addressInfo.extraAddress) {
+                meetingPlace += ` ${addressInfo.extraAddress}`;
+            }
+
             finalLat = parseFloat(addressInfo.lat);
             finalLng = parseFloat(addressInfo.lng);
+        } else if (!addressSearchMode && detailAddressInput) {
+            // 상세주소만 변경 모드
 
-            // 새 주소는 있는데 좌표가 없는 경우 (주소 검색은 했지만 좌표를 못 가져온 경우)
-            if (isNaN(finalLat) || isNaN(finalLng)) {
-                Alert("유효한 위치 정보가 필요합니다. 주소를 다시 검색해주세요.");
-                return;
+            // 기존 주소에서 각 부분 분리
+            const addressParts = extractAddressParts(schedule.meetingPlace);
+
+            // 새 주소 구성: 메인 주소 + 새 상세주소 + 참고항목
+            meetingPlace = `${addressParts.mainAddress} ${detailAddressInput}`;
+
+            // 참고항목 추가
+            if (addressParts.extraAddress) {
+                meetingPlace += ` ${addressParts.extraAddress}`;
             }
-        } else {
-            // 주소를 변경하지 않은 경우 기존 좌표 사용
+
+            // 기존 좌표 사용
             finalLat = parseFloat(schedule.lat);
             finalLng = parseFloat(schedule.lng);
+        } else {
+            // 아무 주소 변경 없음
+            meetingPlace = schedule.meetingPlace;
+            finalLat = parseFloat(schedule.lat);
+            finalLng = parseFloat(schedule.lng);
+        }
 
-            // 기존 좌표도 유효하지 않은 경우
-            if (isNaN(finalLat) || isNaN(finalLng)) {
-                Alert("유효한 위치 정보가 필요합니다. 주소를 검색해주세요.");
-                return;
-            }
+        // 유효한 좌표인지 확인
+        if (isNaN(finalLat) || isNaN(finalLng)) {
+            Alert("유효한 위치 정보가 필요합니다. 주소를 검색해주세요.");
+            return;
+        }
+
+        // 변경된 내용이 있는지 확인
+        const isTitleChanged = meetingTitle.trim() !== (schedule.meetingTitle || '').trim();
+        const isTimeChanged = meetingTime !== (schedule.meetingTime || '');
+        const isPlaceChanged = meetingPlace.trim() !== (schedule.meetingPlace || '').trim();
+
+        if (!isTitleChanged && !isTimeChanged && !isPlaceChanged) {
+            Alert("변경된 내용이 없습니다.");
+            return;
         }
 
         const body = {
-            meetingTitle,
+            meetingTitle: meetingTitle.trim(),
             meetingTime,
-            meetingPlace: meetingPlace || schedule.meetingPlace, // 새 주소가 없으면 기존 주소 사용
+            meetingPlace: meetingPlace.trim(),
             lat: finalLat,
             lng: finalLng
         };
@@ -208,6 +291,7 @@ const ScheduleDetail = () => {
             if (response.status === 200) {
                 Alert('일정이 수정되었습니다.', '', '', () => {
                     setIsEditing(false);
+                    setDetailAddressInput('');
                     fetchScheduleDetail(); // 수정된 데이터 다시 불러오기
                 });
             }
@@ -288,24 +372,63 @@ const ScheduleDetail = () => {
                         </div>
                         <div className="form-group">
                             <label>일정 시간:</label>
-                            <DateTimeInput
-                                onMeetingTimeChange={handleMeetingTimeChange}
-                                initialDateTime={meetingTime}
-                            />
+                            {initialValuesSet && (
+                                <DateTimeInput
+                                    key={`date-input-${schedule.meetingTime}`} // 키 추가로 컴포넌트 강제 리렌더링
+                                    onMeetingTimeChange={handleMeetingTimeChange}
+                                    initialDateTime={schedule.meetingTime}
+                                />
+                            )}
                         </div>
                         <div className="form-group">
                             <label>모임 장소:</label>
-                            <Address
-                                onAddressSelect={handleAddressSelect}
-                                initialAddress={addressInfo.address || ''}
-                                initialLat={addressInfo.lat || ''}
-                                initialLng={addressInfo.lng || ''}
-                            />
+                            <p className="current-address">현재 주소: {schedule.meetingPlace}</p>
+
+                            {/* 주소 검색 */}
+                            <div className="address-options">
+                                <button
+                                    className={`custom-button ${addressSearchMode ? 'active' : ''}`}
+                                    type="button"
+                                    onClick={() => setAddressSearchMode(true)}
+                                >
+                                    새 주소 검색하기
+                                </button>
+                                <button
+                                    className={`custom-button ${!addressSearchMode ? 'active' : ''}`}
+                                    type="button"
+                                    onClick={() => setAddressSearchMode(false)}
+                                >
+                                    상세주소만 변경하기
+                                </button>
+                            </div>
+
+                            {addressSearchMode ? (
+                                // 새 주소 검색 모드
+                                <div className="address-search-section">
+                                    <Address
+                                        onAddressSelect={handleAddressSelect}
+                                        initialAddress=""
+                                        initialLat=""
+                                        initialLng=""
+                                    />
+                                </div>
+                            ) : (
+                                // 상세주소만 변경 모드
+                                <div className="detail-address-only">
+                                    <input
+                                        type="text"
+                                        value={detailAddressInput}
+                                        onChange={(e) => setDetailAddressInput(e.target.value)}
+                                        placeholder="상세주소만 입력 (예: 101호, 이디아카페 등)"
+                                    />
+                                    <p className="help-text">기존 주소의 상세주소 부분만 변경됩니다.</p>
+                                </div>
+                            )}
 
                             {/* 주소 선택 후 선택된 위치 지도 표시 */}
-                            {addressInfo.lat && addressInfo.lng && (
+                            {addressInfo.lat && addressInfo.lng && addressInfo.address && (
                                 <div className="map-preview">
-                                    <h4>선택한 위치</h4>
+                                    <h4>새로 선택한 위치</h4>
                                     <KakaoMap
                                         key={`edit-map-${Date.now()}-${addressInfo.lat}-${addressInfo.lng}`}
                                         lat={addressInfo.lat}
@@ -331,7 +454,7 @@ const ScheduleDetail = () => {
                         {/* 지도 표시 */}
                         {(schedule.lat && schedule.lng) && (
                             <div className="map-container">
-                                <KakaoMap
+                            <KakaoMap
                                     key={`view-map-${scheduleId}-${schedule.lat}-${schedule.lng}`}
                                     lat={schedule.lat}
                                     lng={schedule.lng}
