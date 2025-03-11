@@ -6,6 +6,7 @@ import { KakaoMapService } from 'src/services/KakaoMapService';
 import MarkerModal from "./MarkerModal";
 import SkeletonKakaoMap from "./SkeletonKakaoMap";
 import "./CustomMap.css";
+import { Project } from "src/constants/project";
 
 function CustomMap() {
 	const { location, errorMessage } = useUserLocation();
