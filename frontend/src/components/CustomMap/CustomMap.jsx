@@ -89,9 +89,6 @@ function CustomMap() {
 		setFilterType(e.target.value);
 	};
 
-	const handleDataRangeChange = (e) => {
-		setDateRange(e.target.value);
-	};
   // 현재 지도 영역에 있는 데이터 검색 (버튼 클릭 또는 초기 로드시에만 실행)
   const handleSearch = async () => {
     if (mapRef.current && window.kakao && window.kakao.maps) {
@@ -99,14 +96,14 @@ function CustomMap() {
       const currentLevel = mapRef.current.getLevel();
       currentLevelRef.current = currentLevel;
       setMapLevel(currentLevel);
-
+      
       const bounds = mapRef.current.getBounds();
       const northEast = bounds.getNorthEast();
       const southWest = bounds.getSouthWest();
-
-      const bottomLeft = {
-        lat: southWest.getLat(),
-        lng: southWest.getLng()
+  
+      const bottomLeft = { 
+        lat: southWest.getLat(), 
+        lng: southWest.getLng() 
       };
       const topRight = {
         lat: northEast.getLat(),
