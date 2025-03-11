@@ -24,6 +24,7 @@ class KakaoMapController(
     @Operation(summary = "지도내에 해당하는 모임 일정 조회", description = "사용자가 지정한 관심사 혹은 전체 모임 일정을 조회합니다.")
     fun getLocationInfo(
         @RequestParam("filterType") filterType: String?,
+        @RequestParam("dataRange") dataRange: String?,
         @RequestParam("bottomLeftLat") bottomLeftLat: Double,
         @RequestParam("bottomLeftLng") bottomLeftLng: Double,
         @RequestParam("topRightLat") topRightLat: Double,
@@ -33,7 +34,15 @@ class KakaoMapController(
         val userId: Long? = principal?.name?.toLongOrNull()
 
         val locationData =
-            kakaoMapService.getLatLngInfo(filterType, bottomLeftLat, bottomLeftLng, topRightLat, topRightLng, userId)
+            kakaoMapService.getLatLngInfo(
+                filterType,
+                dataRange,
+                bottomLeftLat,
+                bottomLeftLng,
+                topRightLat,
+                topRightLng,
+                userId
+            )
 
         return BaseResponse.ok(SuccessCode.SUCCESS, locationData)
     }
