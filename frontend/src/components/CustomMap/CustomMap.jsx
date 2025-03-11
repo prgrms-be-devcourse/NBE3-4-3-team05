@@ -6,6 +6,7 @@ import { KakaoMapService } from 'src/services/KakaoMapService';
 import MarkerModal from "./MarkerModal";
 import SkeletonKakaoMap from "./SkeletonKakaoMap";
 import "./CustomMap.css";
+import { Project } from "src/constants/project";
 
 function CustomMap() {
 	const { location, errorMessage } = useUserLocation();
@@ -21,12 +22,7 @@ function CustomMap() {
 	const currentLevelRef = useRef(5); // 현재 맵 레벨을 ref로 추적
 	const [filterType, setFilterType] = useState("ALL"); // 필터 타입 상태 추가
 	const [dateRange, setDateRange] = useState("ALL"); // 날짜 범위 필터 추가
-	const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 추가
-
-	useEffect(() => {
-		const token = localStorage.getItem("accessToken");
-		setIsLoggedIn(!!token);
-	}, []);
+	const isLogIn = Project.getJwt(); // 로그인 상태 추가
 
 	// 최초 location 업데이트 시 mapCenter를 설정합니다.
 	useEffect(() => {
@@ -164,8 +160,8 @@ function CustomMap() {
 					onChange={handleFilterChange}
 					className="filter-select"
 				>
-					<option value="FAVORITE">전체</option>
-					{isLoggedIn && <option value="FAVORITE">관심사</option>}
+					<option value="ALL">전체</option>
+					{isLogIn && <option value="FAVORITE">관심사</option>}
 				</select>
 				<select
 					value={dateRange}
