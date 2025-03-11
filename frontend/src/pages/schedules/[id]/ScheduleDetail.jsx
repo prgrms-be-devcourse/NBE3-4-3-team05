@@ -5,6 +5,7 @@ import Alert from '../../../components/alert/Alert';
 import DateTimeInput from '../../../components/dateTimeInput/DateTimeInput';
 import Address from "../../../components/address/Address";
 import './ScheduleDetail.css';
+import KakaoMap from "../../kakaoMap/KakaoMap";
 
 const ScheduleDetail = () => {
     const { scheduleId, classId } = useParams();
@@ -39,13 +40,17 @@ const ScheduleDetail = () => {
                 const extraAddressPart = detailData.meetingPlace && detailData.meetingPlace.includes('(') ?
                     `(${detailData.meetingPlace.split('(')[1]}` : '';
 
+                // 좌표 정보 변환 - 명시적으로 파싱
+                const latValue = detailData.lat ? parseFloat(detailData.lat) : '';
+                const lngValue = detailData.lng ? parseFloat(detailData.lng) : '';
+
                 setAddressInfo({
                     address: mainAddress,
                     detailAddress: '',
                     extraAddress: extraAddressPart,
                     postcode: '',
-                    lat: detailData.lat || '',
-                    lng: detailData.lng || ''
+                    lat: latValue,
+                    lng: lngValue
                 });
             } else {
                 console.error('일정 데이터가 없습니다:', response);
@@ -193,8 +198,8 @@ const ScheduleDetail = () => {
             meetingTitle,
             meetingTime,
             meetingPlace: meetingPlace || schedule.meetingPlace, // 새 주소가 없으면 기존 주소 사용
-            lat: finalLat || 37.5665, // 서울 중심부 좌표를 기본값으로 설정
-            lng: finalLng || 126.9780 // 서울 중심부 좌표를 기본값으로 설정
+            lat: finalLat,
+            lng: finalLng
         };
 
         try {
@@ -296,6 +301,20 @@ const ScheduleDetail = () => {
                                 initialLat={addressInfo.lat || ''}
                                 initialLng={addressInfo.lng || ''}
                             />
+
+                            {/* 주소 선택 후 선택된 위치 지도 표시 */}
+                            {addressInfo.lat && addressInfo.lng && (
+                                <div className="map-preview">
+                                    <h4>선택한 위치</h4>
+                                    <KakaoMap
+                                        key={`edit-map-${Date.now()}-${addressInfo.lat}-${addressInfo.lng}`}
+                                        lat={addressInfo.lat}
+                                        lng={addressInfo.lng}
+                                        place={`${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim()}
+                                        height="250px"
+                                    />
+                                </div>
+                            )}
                         </div>
                         <button className="custom-button submit" onClick={handleEditSubmit}>
                             저장하기
@@ -308,10 +327,17 @@ const ScheduleDetail = () => {
                         {schedule.meetingPlace && (
                             <p className="meeting-place">장소: {schedule.meetingPlace}</p>
                         )}
-                        {/* 위도/경도 정보는 필요하다면 여기에 추가 */}
+
+                        {/* 지도 표시 */}
                         {(schedule.lat && schedule.lng) && (
                             <div className="map-container">
-                                {/* 여기에 카카오맵 미니뷰를 추가할 수 있습니다 */}
+                                <KakaoMap
+                                    key={`view-map-${scheduleId}-${schedule.lat}-${schedule.lng}`}
+                                    lat={schedule.lat}
+                                    lng={schedule.lng}
+                                    place={schedule.meetingPlace}
+                                    height="300px"
+                                />
                                 <p>위치 정보: {schedule.lat}, {schedule.lng}</p>
                             </div>
                         )}

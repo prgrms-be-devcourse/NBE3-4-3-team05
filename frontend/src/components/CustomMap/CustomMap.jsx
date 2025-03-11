@@ -101,7 +101,13 @@ function CustomMap() {
   
       try {
         const response = await KakaoMapService.getLocationInfo(filterType, bottomLeft, topRight);
-        setLocations(response.data.data);
+        // 응답에 데이터가 있는지 확인하고 설정
+        if (response && response.data && Array.isArray(response.data.data)) {
+          setLocations(response.data.data);
+        } else {
+          console.warn("API에서 위치 데이터를 받지 못했습니다.");
+          setLocations([]);
+        }
         
         // 마커가 즉시 표시되도록 강제 리렌더링 트리거
         setForceUpdate(prev => prev + 1);
