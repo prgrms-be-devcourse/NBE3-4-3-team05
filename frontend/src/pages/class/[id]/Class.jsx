@@ -47,7 +47,23 @@ const Class = () => {
   const openModal = () => setIsModalOpen(true);
   const schedulesModal = () => setIsSchedulesModal(true);
   const closeModal = () => setIsModalOpen(false);
-  const closeSchedulesModal = () => setIsSchedulesModal(false);
+  const closeSchedulesModal = () => {
+    // 작성 중인 내용이 있는지 확인
+    if (meetingTitle || meetingTime || addressInfo.address) {
+        setIsSchedulesModal(false);
+        // 모달 내용 초기화
+        setMeetingTitle("");
+        setMeetingTime("");
+        setAddressInfo({
+          address: '',
+          detailAddress: '',
+          lat: '',
+          lng: ''
+        });
+    } else {
+      setIsSchedulesModal(false);
+    }
+  };
 
   const modifyResult = () => {
     closeModal();
@@ -270,13 +286,13 @@ const Class = () => {
                   data3={schedule?.meetingTime}
                   data5={schedule?.meetingPlace}
                   description="true"
-                  button1 ="참석"
-                  onClick1={()=>debouncedHandleCheckIn(schedule?.scheduleId,true)}
-                  button2 = "불참석"
-                  onClick2={()=>debouncedHandleCheckIn(schedule?.scheduleId,false)}
+                  button1="참석"
+                  onClick1={() => debouncedHandleCheckIn(schedule?.scheduleId, true)}
+                  button2="불참석"
+                  onClick2={() => debouncedHandleCheckIn(schedule?.scheduleId, false)}
                   button3="상세보기"
                   check
-                  onClick3={()=>handlerScheduleDetail(schedule.scheduleId)}
+                  onClick3={() => handlerScheduleDetail(schedule.scheduleId)}
                   ref={cacheRef}
               />)
           )}
@@ -286,7 +302,7 @@ const Class = () => {
           <div className="modal-form">
             <label htmlFor="name">모임 이름:</label>
             <input
-                id = "name"
+                id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -294,7 +310,7 @@ const Class = () => {
             />
             <label htmlFor="description">모임 설명:</label>
             <textarea
-                id = "description"
+                id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="모임 설명을 입력하세요"
@@ -305,34 +321,50 @@ const Class = () => {
           </div>
         </Modal>
 
-        {/*일정 생성*/}
+        {/* 일정 생성 */}
         <Modal isOpen={isSchdulesModal} title={"일정 생성"} onClose={closeSchedulesModal}>
           <div className="modal-form">
-            <label>일정 제목:</label>
-            <input
-                type="text"
-                value={meetingTitle}
-                onChange={(e) => setMeetingTitle(e.target.value)}
-                placeholder="일정 제목을 입력하세요"
-            />
-            <DateTimeInput onMeetingTimeChange={handleMeetingTimeChange} />
-            <Address onAddressSelect={handleAddressSelect} />
-            {/* 주소 선택 후 지도 표시 - 고유 키 추가 */}
-            {addressInfo.lat && addressInfo.lng && (
-                <div className="map-preview">
-                  <h4>선택한 위치</h4>
-                  <KakaoMap
-                      key={`create-map-${addressInfo.lat}-${addressInfo.lng}`} // 같은 위치 여러번 랜더링할 때 발생하는 문제 예방
-                      lat={parseFloat(addressInfo.lat)}
-                      lng={parseFloat(addressInfo.lng)}
-                      place={`${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim()}
-                      height="180px"
-                  />
-                </div>
-            )}
-            <button className="custom-button" onClick={handlerCreateSchedule}>
-              생성하기
-            </button>
+            <div className="form-group">
+              <label>일정 제목:</label>
+              <input
+                  type="text"
+                  value={meetingTitle}
+                  onChange={(e) => setMeetingTitle(e.target.value)}
+                  placeholder="일정 제목을 입력하세요"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>일정 시간:</label>
+              <DateTimeInput onMeetingTimeChange={handleMeetingTimeChange} />
+            </div>
+
+            <div className="form-group">
+              <label>모임 장소:</label>
+              <div className="address-search-section">
+                <Address onAddressSelect={handleAddressSelect} />
+              </div>
+
+              {/* 주소 선택 후 지도 표시 */}
+              {addressInfo.lat && addressInfo.lng && (
+                  <div className="map-preview">
+                    <h4>선택한 위치</h4>
+                    <KakaoMap
+                        key={`create-map-${addressInfo.lat}-${addressInfo.lng}`}
+                        lat={parseFloat(addressInfo.lat)}
+                        lng={parseFloat(addressInfo.lng)}
+                        place={`${addressInfo.address} ${addressInfo.detailAddress || ''}`.trim()}
+                        height="130px"
+                    />
+                  </div>
+              )}
+            </div>
+
+            <div className="button-container">
+              <button className="custom-button submit" onClick={handlerCreateSchedule}>
+                생성하기
+              </button>
+            </div>
           </div>
         </Modal>
       </div>
