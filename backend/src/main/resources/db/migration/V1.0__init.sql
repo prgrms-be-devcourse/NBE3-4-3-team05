@@ -132,13 +132,10 @@ CREATE TABLE `class_user_entity`
 -- Schedule Table
 CREATE TABLE `schedules`
 (
-    `lat`           double       NOT NULL,
-    `lng`           double       NOT NULL,
     `class_id`      bigint      DEFAULT NULL,
     `created_at`    datetime(6) DEFAULT NULL,
     `modified_at`   datetime(6) DEFAULT NULL,
     `schedules_id`  bigint       NOT NULL AUTO_INCREMENT,
-    `meeting_place` varchar(255) NOT NULL,
     `meeting_time`  varchar(255) NOT NULL,
     `meeting_title` varchar(255) NOT NULL,
     PRIMARY KEY (`schedules_id`),
