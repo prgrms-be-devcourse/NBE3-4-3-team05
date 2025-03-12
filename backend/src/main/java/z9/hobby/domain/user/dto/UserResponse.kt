@@ -41,7 +41,8 @@ class UserResponse {
     data class ScheduleInfo(
         val classId: Long?,
         val meetingTime: String?,
-        val meetingTitle: String?
+        val meetingTitle: String?,
+        val meetingPlace: String?
     ) {
         companion object {
             fun from(schedulesEntity: SchedulesEntity): ScheduleInfo {
@@ -49,6 +50,7 @@ class UserResponse {
                     classId = schedulesEntity.getClasses().id,
                     meetingTime = schedulesEntity.getMeetingTime(),
                     meetingTitle = schedulesEntity.getMeetingTitle(),
+                    meetingPlace = schedulesEntity.getMeetingPlace()
                 )
             }
         }

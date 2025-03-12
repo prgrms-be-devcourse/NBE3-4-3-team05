@@ -20,7 +20,8 @@ enum class ErrorCode(
     NEED_LOGIN(HttpStatus.UNAUTHORIZED, false, "1002", "로그인이 필요합니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "1003", "접근 권한이 부족합니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, false, "1004", "토큰이 만료되었습니다. 재로그인 진행해 주세요."),
-//    OAUTH_USER_LOGIN_FAIL(HttpStatus.BAD_REQUEST, false, 1005, "소셜 로그인 회원 입니다. 소셜 로그인으로 진행 해 주세요."), //NotUse
+
+    //    OAUTH_USER_LOGIN_FAIL(HttpStatus.BAD_REQUEST, false, 1005, "소셜 로그인 회원 입니다. 소셜 로그인으로 진행 해 주세요."), //NotUse
     INVALID_OAUTH_PROVIDER(HttpStatus.BAD_REQUEST, false, "1006", "지원하지 않는 로그인 방식 입니다."),
     NOT_EXIST_FAVORITE(HttpStatus.BAD_REQUEST, false, "1007", "등록되지 않은 관심사 입니다."),
     DUPLICATED_LOGIN_ID(HttpStatus.BAD_REQUEST, false, "1008", "중복된 로그인 아이디 입니다."),
@@ -42,7 +43,12 @@ enum class ErrorCode(
     CLASS_MASTER_TRANSFER_REQUIRED(HttpStatus.FORBIDDEN, false, "3004", "마스터는 권한을 위임해야만 탈퇴할 수 있습니다."),
     CLASS_MODIFY_DENIED(HttpStatus.FORBIDDEN, false, "3005", "모임방의 정보는 모임장만 수정 가능합니다."),
     CLASS_USER_FORBIDDEN(HttpStatus.FORBIDDEN, false, "3006", "권한이 없습니다."),
-    CLASS_DELETE_DENIED_WITH_MEMBERS(HttpStatus.BAD_REQUEST, false, "3007", "회원이 존재하는 모임은 삭제할 수 없습니다. 권한을 위임하고 탈퇴해주세요."),
+    CLASS_DELETE_DENIED_WITH_MEMBERS(
+        HttpStatus.BAD_REQUEST,
+        false,
+        "3007",
+        "회원이 존재하는 모임은 삭제할 수 없습니다. 권한을 위임하고 탈퇴해주세요."
+    ),
     CLASS_USER_BANNED(HttpStatus.FORBIDDEN, false, "3008", "강퇴당한 회원은 재가입 하실 수 없습니다."),
     CLASS_READ_FAILED(HttpStatus.BAD_REQUEST, false, "3009", "해당하는 모임을 조회할 수 없습니다."),
     CLASS_MASTER_TRANSFER_ME(HttpStatus.BAD_REQUEST, false, "3010", "본인에게 권한을 위임할 수 없습니다."),
@@ -56,6 +62,8 @@ enum class ErrorCode(
     SCHEDULE_READ_FAILED(HttpStatus.BAD_REQUEST, false, "4005", "일정 조회에 실패했습니다"),
     INVALID_MEETING_TIME(HttpStatus.BAD_REQUEST, false, "4005", "과거 날짜는 설정할 수 없습니다."),
     INVALID_MEETING_TIME_FORMAT(HttpStatus.BAD_REQUEST, false, "4006", "날짜 형식이 올바르지 않습니다."),
+    INVALID_DATA_RANGE(HttpStatus.BAD_REQUEST, false, "4007", "요청된 날짜가 허용된 범위를 초과했습니다."),
+    INVALID_FILTER_TYPE(HttpStatus.BAD_REQUEST, false, "4008", "요청된 필터가 허용된 범위를 초과했습니다."),
 
     //5000 ~ 5999
     // 오류 종류 : 체크인
