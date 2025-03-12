@@ -77,6 +77,9 @@ dependencies {
 
     // Actuator
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    // flyway
+    implementation("org.flywaydb:flyway-mysql:11.3.4")
 }
 
 dependencyManagement {
