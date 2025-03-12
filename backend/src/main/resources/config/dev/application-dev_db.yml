@@ -4,9 +4,6 @@ spring:
     url: ${Z9_DB_URL}
     username: ${Z9_DB_USERNAME}
     password: ${Z9_DB_PASSWORD}
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 5
   jpa:
     hibernate:
       ddl-auto: validate
@@ -16,12 +13,20 @@ spring:
       hibernate:
         default_batch_fetch_size: 100
         dialect: org.hibernate.dialect.MySQLDialect
+        highlight_sql: true
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
     open-in-view: false
   flyway:
     enabled: true
     baseline-on-migrate: true
     baseline-version: 1
-    locations: classpath:db/migration, classpath:db/seed
+    locations: classpath:db/migration, classpath:db/seed/dev
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
 
 redis:
   host : ${Z9_REDIS_DB_HOST}
