@@ -18,10 +18,8 @@ spring:
         show_sql: true
         use_sql_comments: true
     open-in-view: false
-#logging:
-#  level:
-#    org.hibernate.sql: debug
-#    org.hibernate.type: trace
+  flyway:
+    enabled: false
 
 redis:
   host : 'TEST_REDIS_DB_HOST'
